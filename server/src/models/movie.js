@@ -6,27 +6,39 @@ const movieSchema = new mongoose.Schema({
     required: true,
   },
   img: {
+    //thêm required
     type: String,
   },
   subImg: {
+    //thêm required
+
     type: String,
   },
   trailer: {
+    //thêm required
+
     type: String,
   },
   description: {
+    //thêm required
+
     type: String,
   },
   releaseDate: {
+    //thêm required
     type: Date,
   },
   nation: {
+    //thêm required
     type: String,
   },
   copyright: {
+    //thêm required
     type: String,
   },
   policies: {
+    //thêm required
+
     type: String,
   },
   isActive: {
@@ -38,9 +50,12 @@ const movieSchema = new mongoose.Schema({
     default: 0,
   },
   productorMovie: {
+    //thêm required
     type: String,
   },
   director: {
+    //thêm required
+
     type: String,
   },
   categoryIds: [
@@ -56,6 +71,7 @@ const movieSchema = new mongoose.Schema({
     },
   ],
   episodes: [
+    // nên bỏ ra 1 Schema con và thêm validation cho từng field
     {
       episodeNumber: Number,
       video: String,
@@ -66,6 +82,7 @@ const movieSchema = new mongoose.Schema({
     },
   ],
   feedbacks: [
+    // nên bỏ ra 1 Schema con và thêm validation cho từng field
     {
       userId: {
         type: mongoose.Schema.Types.ObjectId,

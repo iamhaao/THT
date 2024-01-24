@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
+    unique,
     trim: true,
   },
   email: {
@@ -24,7 +25,7 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: true, // thêm validation check có ký tự hoa
     minlength: 7,
   },
   bod: {
@@ -33,15 +34,21 @@ const userSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    required: true,
+    required: true, // thiếu validate
   },
   address: {
     type: String,
     required: true,
   },
-  isPremium: {
-    type: Boolean,
-    default: false,
+  premium: {
+    isPremium: {
+      type: Boolean,
+      default: false,
+    },
+    exp: {
+      type: Date,
+      default: undefined,
+    },
   },
   isAdmin: {
     type: Boolean,
@@ -58,10 +65,6 @@ const userSchema = new mongoose.Schema({
   balance: {
     type: Number,
     default: 0,
-  },
-  premiumPackageId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "PremiumPackage",
   },
   favoriteMovies: [
     {
@@ -80,9 +83,12 @@ const userSchema = new mongoose.Schema({
   ],
   billingHistory: [
     {
-      packageId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "PremiumPackage",
+      content: String,
+      subContent: String,
+      fluctuations: {
+        // lúc kiểm tra lịch sử sẽ biết nó cộng tiền hay trừ tiền (1: + tiền do nạp tiền , 2: - tiền do mua premiumaccount hoặc làm gì đó)
+        Number,
+        required,
       },
       purchasedOn: Date,
     },
@@ -93,6 +99,10 @@ const userSchema = new mongoose.Schema({
       receivedOn: {
         type: Date,
         default: Date.now,
+      },
+      seen: {
+        Boolean,
+        default: false,
       },
     },
   ],
