@@ -5,18 +5,13 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
+    unique,
     trim: true,
   },
   email: {
     type: String,
     required: true,
     unique: true,
-    lowercase: true,
-    validate: (value) => {
-      if (!validator.isEmail(value)) {
-        throw new Error({ error: "Invalid Email address" });
-      }
-    },
   },
   fullName: {
     type: String,
@@ -24,8 +19,8 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
-    minlength: 7,
+    required: true, // thêm validation check có ký tự hoa
+    minlength: 6,
   },
   bod: {
     type: Date,
@@ -33,15 +28,21 @@ const userSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    required: true,
+    required: true, // thiếu validate
   },
   address: {
     type: String,
     required: true,
   },
-  isPremium: {
-    type: Boolean,
-    default: false,
+  premium: {
+    isPremium: {
+      type: Boolean,
+      default: false,
+    },
+    exp: {
+      type: Date,
+      default: undefined,
+    },
   },
   isAdmin: {
     type: Boolean,
@@ -59,10 +60,6 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  premiumPackageId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "PremiumPackage",
-  },
   favoriteMovies: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -76,24 +73,6 @@ const userSchema = new mongoose.Schema({
         ref: "Movie",
       },
       watchedOn: Date,
-    },
-  ],
-  billingHistory: [
-    {
-      packageId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "PremiumPackage",
-      },
-      purchasedOn: Date,
-    },
-  ],
-  notifications: [
-    {
-      message: String,
-      receivedOn: {
-        type: Date,
-        default: Date.now,
-      },
     },
   ],
 });

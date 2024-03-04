@@ -1,0 +1,28 @@
+import jwt from "jsonwebtoken";
+import User from "../models/user";
+export const verifyToken = async (req, res, next) => {
+  const token = req.cookies["auth_token"];
+  try {
+    if (!token) {
+      res.status(401);
+      throw new Error("Not authorized, token failed");
+    }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    req.user = await User.findById(decoded).select("-password");
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: error.message });
+  }
+};
+export const admin = (req, res, next) => {
+  try {
+    if (req.user && req.user.isAdmin) {
+      next();
+    } else {
+      res.status(401);
+      throw new Error("Not authorized as an admin!");
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};

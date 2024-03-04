@@ -1,86 +1,82 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const movieSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  img: {
-    type: String,
-  },
-  subImg: {
-    type: String,
-  },
-  trailer: {
-    type: String,
-  },
-  description: {
-    type: String,
-  },
-  releaseDate: {
-    type: Date,
-  },
-  nation: {
-    type: String,
-  },
-  copyright: {
-    type: String,
-  },
-  policies: {
-    type: String,
-  },
-  isActive: {
-    type: Boolean,
-    default: true,
-  },
-  view: {
-    type: Number,
-    default: 0,
-  },
-  productorMovie: {
-    type: String,
-  },
-  director: {
-    type: String,
-  },
-  categoryIds: [
-    {
+const reviewSchema = new mongoose.Schema(
+  {
+    userName: { type: String },
+    userImage: { type: String },
+    rating: { type: Number },
+    comment: { type: String },
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
+      ref: "User",
     },
-  ],
-  actorIds: [
-    {
+  },
+  {
+    timestamps: true,
+  }
+);
+const moviesSchema = new mongoose.Schema(
+  {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Actor",
+      ref: "User",
     },
-  ],
-  episodes: [
-    {
-      episodeNumber: Number,
-      video: String,
-      title: String,
-      sumary: String,
-      duration: Number,
-      releaseDate: Date,
+    name: {
+      type: String,
+      required: true,
     },
-  ],
-  feedbacks: [
-    {
-      userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+    des: {
+      type: String,
+      required: true,
+    },
+    titleImage: {
+      type: String,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+    },
+    language: {
+      type: String,
+      required: true,
+    },
+    year: {
+      type: Number,
+      required: true,
+    },
+    time: {
+      type: Number,
+      required: true,
+    },
+    video: {
+      type: String,
+    },
+    rate: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    numberOfReviews: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    reviews: [reviewSchema],
+    casts: [
+      {
+        name: { type: String },
+        image: { type: String },
       },
-      comment: String,
-      rating: Number,
-      date: Date,
-    },
-  ],
-  advertisementId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Advertisement",
+    ],
   },
-});
+  {
+    timestamps: true,
+  }
+);
 
-const Movie = mongoose.model("Movie", movieSchema);
-module.exports = Movie;
+export default mongoose.model("Movies", moviesSchema);
