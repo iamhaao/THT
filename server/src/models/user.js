@@ -12,12 +12,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    lowercase: true,
-    validate: (value) => {
-      if (!validator.isEmail(value)) {
-        throw new Error({ error: "Invalid Email address" });
-      }
-    },
   },
   fullName: {
     type: String,
@@ -26,7 +20,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true, // thêm validation check có ký tự hoa
-    minlength: 7,
+    minlength: 6,
   },
   bod: {
     type: Date,
@@ -79,31 +73,6 @@ const userSchema = new mongoose.Schema({
         ref: "Movie",
       },
       watchedOn: Date,
-    },
-  ],
-  billingHistory: [
-    {
-      content: String,
-      subContent: String,
-      fluctuations: {
-        // lúc kiểm tra lịch sử sẽ biết nó cộng tiền hay trừ tiền (1: + tiền do nạp tiền , 2: - tiền do mua premiumaccount hoặc làm gì đó)
-        Number,
-        required,
-      },
-      purchasedOn: Date,
-    },
-  ],
-  notifications: [
-    {
-      message: String,
-      receivedOn: {
-        type: Date,
-        default: Date.now,
-      },
-      seen: {
-        Boolean,
-        default: false,
-      },
     },
   ],
 });
