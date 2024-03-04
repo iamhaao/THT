@@ -3,7 +3,8 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import categoryRouters from "./src/Routes/Category.js";
+import categoryRouter from "./src/Routes/Category.js";
+import premiumPacakgeRouter from "./src/Routes/PremiumPackage.js";
 import { connectDB } from "./src/config/connectDB.js";
 
 const app = express();
@@ -21,7 +22,8 @@ app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "pug");
 connectDB();
 // route to test server
-app.use("/categories", categoryRouters);
+app.use("/categories", categoryRouter);
+app.use("/packages", premiumPacakgeRouter);
 
 app.get("/", (req, res) => res.send("API Running"));
 // run server on port 5000
