@@ -1,5 +1,4 @@
-const mongoose = require("mongoose");
-
+import mongoose from "mongoose";
 const premiumPackageSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -15,9 +14,9 @@ const premiumPackageSchema = new mongoose.Schema({
   },
   discount: {
     type: Number,
-    required: true,
+    default: 0,
   },
 });
 
 const PremiumPackage = mongoose.model("PremiumPackage", premiumPackageSchema);
-module.exports = PremiumPackage;
+export default PremiumPackage;
