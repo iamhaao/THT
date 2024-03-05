@@ -1,7 +1,8 @@
 import express from "express";
-import {createMovie} from "../Controller/movies.controller.js";
-const route = express.Router();
+import {createMovie, getMovieById} from "../Controller/movie.controller.js";
+const router = express.Router();
 
 
-route.post("/", createMovie);
-export default route;
+router.post("/", createMovie);
+router.get("/:id", getMovieById)
+export default router;
