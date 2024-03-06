@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "../Layout/Layout";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -10,8 +10,10 @@ import { Input } from "../shared/input";
 import { InlineError } from "../shared/Notification/Error";
 import { FiLogIn } from "react-icons/fi";
 import { useMutation } from "react-query";
+import { useAppContext } from "../context/AppContext";
 function SignIn() {
   const navigate = useNavigate();
+  const { updateUserInformation, userInfo } = useAppContext();
   const {
     register,
     handleSubmit,
@@ -19,20 +21,28 @@ function SignIn() {
   } = useForm({
     resolver: yupResolver(LoginValidation),
   });
-  const mutation = useMutation(signIn, {
-    onSuccess: async () => {
-      Toast({ message: "Welcome to !", type: "SUCCESS" });
+  const { mutate, isLoading } = useMutation(signIn, {
+    onSuccess: (data) => {
       navigate("/");
+      updateUserInformation(data);
+      Toast({ message: `Welcome to ${userInfo.userName} ! `, type: "SUCCESS" });
     },
     onError: (error) => {
-      console.error("Login Error:", error);
-      const errorMessage = error.response?.data?.message || "An error occurred";
-      Toast({ message: errorMessage, type: "ERROR" });
+      console.log(error);
+      Toast({ message: error.message, type: "ERROR" });
     },
   });
+
+  useEffect(() => {
+    if (userInfo?.isAdmin) {
+      navigate("/dashboard");
+    } else if (userInfo) {
+      navigate("/");
+    }
+  }, [userInfo, isLoading, navigate]);
   //on submit
   const onSubmit = (data) => {
-    mutation.mutate(data);
+    mutate(data);
   };
   return (
     <Layout>
@@ -75,12 +85,20 @@ function SignIn() {
           </div>
           <button
             type="submit"
+            disabled={isLoading}
             className="bg-subMain transitions hover:bg-main flex-rows gap-4 text-white p-2 rounded-lg w-full"
           >
-            <>
-              <FiLogIn />
-              Sign In
-            </>
+            {
+              //if loading show loading
+              isLoading ? (
+                "Loading..."
+              ) : (
+                <>
+                  <FiLogIn />
+                  Sign In
+                </>
+              )
+            }
           </button>
           <div className="flex gap-3 w-full py-2 border-gray-600 border-2 rounded-lg justify-center items-center bg-white text-gray-400 hover:bg-dry ">
             <img
@@ -92,7 +110,7 @@ function SignIn() {
           </div>
           <p className="text-center text-border">
             Don't have an account?
-            <Link to="/register" className="text-dryGray font-semibold ml-2">
+            <Link to="/sign-up" className="text-dryGray font-semibold ml-2">
               Sign Up
             </Link>
           </p>

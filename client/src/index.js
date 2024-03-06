@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { ToastContainer } from "react-toastify";
 import reportWebVitals from "./reportWebVitals";
+import { AppContextProvider } from "./context/AppContext";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -18,8 +19,10 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ToastContainer position="bottom-left" autoClose={5000} closeOnClick />
-      <App />
+      <AppContextProvider>
+        <ToastContainer position="bottom-left" autoClose={5000} closeOnClick />
+        <App />
+      </AppContextProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );
