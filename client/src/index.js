@@ -2,14 +2,25 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
+import { QueryClient, QueryClientProvider } from "react-query";
+import "react-toastify/dist/ReactToastify.css";
+
 import { ToastContainer } from "react-toastify";
 import reportWebVitals from "./reportWebVitals";
-
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 0,
+    },
+  },
+});
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <ToastContainer position="bottom-left" autoClose={5000} closeOnClick />
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <ToastContainer position="bottom-left" autoClose={5000} closeOnClick />
+      <App />
+    </QueryClientProvider>
   </React.StrictMode>
 );
 

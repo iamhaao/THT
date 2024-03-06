@@ -5,6 +5,7 @@ import { HiOutlineFilm } from "react-icons/hi";
 import { TbCrown } from "react-icons/tb";
 import { RiContactsFill } from "react-icons/ri";
 import { RiBox3Fill } from "react-icons/ri";
+import { FiHeart } from "react-icons/fi";
 
 function Header() {
   return (
@@ -64,6 +65,15 @@ function Header() {
             className="hover:text-subMain bg-subMain p-2 rounded hover:bg-dry transitions text-white flex gap-2 justify-end items-center"
           >
             Sign In
+          </NavLink>
+          <NavLink
+            to="/favorite"
+            className={`hover:text-subMain transitions text-white flex gap-2 justify-end items-center relative`}
+          >
+            <div className="w-5 h-5 flex-colo rounded-full text-xs bg-subMain text-white absolute -top-5 -right-1 ">
+              0
+            </div>
+            <FiHeart className="w-6 h-6" />
           </NavLink>
         </div>
       </div>
