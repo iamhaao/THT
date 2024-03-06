@@ -1,13 +1,29 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import { QueryClient, QueryClientProvider } from "react-query";
+import "react-toastify/dist/ReactToastify.css";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import { ToastContainer } from "react-toastify";
+import reportWebVitals from "./reportWebVitals";
+import { AppContextProvider } from "./context/AppContext";
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 0,
+    },
+  },
+});
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <AppContextProvider>
+        <ToastContainer position="bottom-left" autoClose={5000} closeOnClick />
+        <App />
+      </AppContextProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 );
 
