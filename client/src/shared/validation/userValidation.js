@@ -21,8 +21,7 @@ export const RegisterValidation = yup.object().shape({
   name: yup
     .string()
     .required("Full name is required")
-    .max(30, "Fullname is mus be lessthan 30 characters")
-    .matches(/^[a-zA-Z ]*$/, "Name must contain only letters"),
+    .max(30, "Fullname is mus be lessthan 30 characters"),
   dob: yup
     .date()
     .nullable()

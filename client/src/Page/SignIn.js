@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../Layout/Layout";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -11,8 +11,11 @@ import { InlineError } from "../shared/Notification/Error";
 import { FiLogIn } from "react-icons/fi";
 import { useMutation } from "react-query";
 import { useAppContext } from "../context/AppContext";
+import { LuEye, LuEyeOff } from "react-icons/lu";
 function SignIn() {
   const navigate = useNavigate();
+  const [isShowPass, setIsShowPass] = useState(false);
+
   const { updateUserInformation, userInfo } = useAppContext();
   const {
     register,
@@ -24,20 +27,20 @@ function SignIn() {
   const { mutate, isLoading } = useMutation(signIn, {
     onSuccess: (data) => {
       updateUserInformation(data);
+
+      Toast({ message: `Welcome to Monterhub! `, type: "SUCCESS" });
     },
     onError: (error) => {
       Toast({ message: error.message, type: "ERROR" });
     },
   });
-  console.log(userInfo);
   useEffect(() => {
     if (userInfo?.isAdmin) {
       navigate("/dashboard");
     } else if (userInfo) {
       navigate("/");
-      Toast({ message: `Welcome to ${userInfo.userName} ! `, type: "SUCCESS" });
     }
-  }, [userInfo, isLoading, navigate]);
+  }, [userInfo, navigate]);
   //on submit
   const onSubmit = (data) => {
     mutate(data);
@@ -67,9 +70,18 @@ function SignIn() {
           <div className="w-full">
             <Input
               label="Password"
-              type="password"
+              type={isShowPass ? "text" : "password"}
               name="password"
               register={register("password")}
+              suffix={
+                <span onClick={() => setIsShowPass(!isShowPass)}>
+                  {isShowPass ? (
+                    <LuEyeOff className="w-4 h-4" />
+                  ) : (
+                    <LuEye className="w-4 h-4" />
+                  )}
+                </span>
+              }
             />
             {errors.password && <InlineError text={errors.password.message} />}
           </div>
