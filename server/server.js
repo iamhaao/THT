@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import categoryRouter from "./src/Routes/Category.js";
 import premiumPacakgeRouter from "./src/Routes/PremiumPackage.js";
 import movieRouter from "./src/Routes/movie.router.js";
-
+import userRouter from "./src/Routes/UserRoutes.js";
 import { connectDB } from "./src/config/connectDB.js";
 
 const app = express();
@@ -26,8 +26,8 @@ connectDB();
 // route to test server
 app.use("/categories", categoryRouter);
 app.use("/packages", premiumPacakgeRouter);
-app.use("/movies",movieRouter);
-
+app.use("/movies", movieRouter);
+app.use("/users", userRouter);
 
 app.get("/", (req, res) => res.send("API Running"));
 // run server on port 5000

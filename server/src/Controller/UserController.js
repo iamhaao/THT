@@ -1,29 +1,31 @@
-import User from "../models/user.js";
-import { generateToken, destroyToken } from "../middleware/auth.js";
+import User from "../models/User.js";
+import { generateToken } from "../middleware/auth.js";
 import bcrypt from "bcryptjs";
 
 export const signUp = async (req, res) => {
-  const { username, email, fullName, password, phone, address } = req.body;
-
-  // check if user exists
-  const isExists = await User.findOne({ username });
-  if (isExists) {
-    return res.status(400).json({ message: "User already exists" });
-  }
-
-  // hash password
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
-
-  const user = new User({
-    username,
-    email,
-    fullName,
-    password: hashedPassword,
-    phone,
-    address,
-  });
   try {
+    const { email, name, password, phone, address, dob } = req.body;
+
+    // check if user exists
+    const isExists = await User.findOne({ email });
+    if (isExists) {
+      res.status(400);
+      throw new Error("User is exist");
+    }
+
+    // hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = new User({
+      email,
+      fullName: name,
+      password: hashedPassword,
+      phone,
+      address,
+      dob,
+    });
+
     await user.save();
     const token = generateToken(user._id);
     res.cookie("auth_token", token, {
@@ -33,7 +35,7 @@ export const signUp = async (req, res) => {
     res.header("auth_token", token);
     res.status(201).json({ user });
   } catch (error) {
-    res.status(409).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 };
 
@@ -60,7 +62,7 @@ export const signIn = async (req, res) => {
 export const signOut = async (req, res) => {
   const token = req.header("auth_token");
   // destroy token
-  destroyToken(token);
+  // destroyToken(token);
 
   res.clearCookie("auth_token");
   res.status(200).json({ message: "Logged out successfully" });
