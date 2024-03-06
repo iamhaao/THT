@@ -1,4 +1,4 @@
-import User from "../models/user.js";
+import User from "../models/User.js";
 
 export const isAdmin = async (req, res, next) => {
   try {
@@ -23,6 +23,7 @@ export const isLogin = (req, res, next) => {
   try {
     // get token from header auth_token
     const token = req.header("auth_token");
+
     if (token) {
       next();
     } else {

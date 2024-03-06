@@ -97,3 +97,7 @@ export const signUpPremium = async (req, res) => {
   await user.save();
   res.status(200).json({ message: "Upgrade to premium successfully" });
 };
+
+export const validateToken = async (req, res) => {
+  res.status(200).json(req.user);
+};
