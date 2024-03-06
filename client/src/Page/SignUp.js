@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../Layout/Layout";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -11,12 +11,10 @@ import { FiLogIn } from "react-icons/fi";
 import { signUp } from "../api";
 import { useMutation } from "react-query";
 import Toast from "../components/Toast";
+import { useAppContext } from "../context/AppContext";
 function SignUp() {
-  //   const dispatch = useDispatch();
   const navigate = useNavigate();
-  //   const { isLoading, isError, userInfo, isSuccess } = useSelector(
-  //     (state) => state.userLogin
-  //   );
+  const { userInfo } = useAppContext();
   const [isShowPass, setIsShowPass] = useState(false);
   const [isShowConfirm, setIsShowConfirm] = useState(false);
   //validate user
@@ -28,37 +26,27 @@ function SignUp() {
     resolver: yupResolver(RegisterValidation),
   });
   //on submit
-  const { mutate, isLoading, isSuccess } = useMutation(signUp, {
+  const { mutate, isLoading } = useMutation(signUp, {
     onSuccess: async () => {
-      Toast({ message: "Welcome to !", type: "SUCCESS" });
-      navigate("/");
+      Toast({ message: "Register Account Success !!!", type: "SUCCESS" });
     },
     onError: (error) => {
       console.error("Login Error:", error);
-      const errorMessage = error.response?.data?.message || "An error occurred";
-      Toast({ message: errorMessage, type: "ERROR" });
+      Toast({ message: error.message, type: "ERROR" });
     },
   });
   //on submit
   const onSubmit = (data) => {
     mutate(data);
   };
-  //   //useEffect
-  //   useEffect(() => {
-  //     if (userInfo?.isAdmin) {
-  //       navigate("/dashboard");
-  //     } else if (userInfo) {
-  //       navigate("/");
-  //     }
-  //     if (isSuccess) {
-  //       toast.success(`Welcome ${userInfo.name}`);
-  //       dispatch({ type: "User_REGISTER_RESET" });
-  //     }
-  //     if (isError) {
-  //       toast.error(isError);
-  //       dispatch({ type: "User_REGISTER_RESET" });
-  //     }
-  //   }, [userInfo, isSuccess, isError, navigate, dispatch]);
+  //useEffect
+  useEffect(() => {
+    if (userInfo?.isAdmin) {
+      navigate("/dashboard");
+    } else if (userInfo) {
+      navigate("/");
+    }
+  }, [userInfo, navigate]);
 
   const handleShowPass = (field) => {
     if (field === "password") {

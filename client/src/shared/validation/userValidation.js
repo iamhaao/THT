@@ -22,7 +22,7 @@ export const RegisterValidation = yup.object().shape({
     .string()
     .required("Full name is required")
     .max(30, "Fullname is mus be lessthan 30 characters")
-    .matches(/^[a-zA-Z ]*$/, "Name must containt only letters"),
+    .matches(/^[a-zA-Z ]*$/, "Name must contain only letters"),
   dob: yup
     .date()
     .nullable()
@@ -39,4 +39,5 @@ export const RegisterValidation = yup.object().shape({
       [yup.ref("password"), null],
       "New Password and Confirm password must match"
     ),
+  term: yup.boolean().oneOf([true], "Term must be agree"),
 });

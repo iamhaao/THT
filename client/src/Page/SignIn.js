@@ -23,21 +23,19 @@ function SignIn() {
   });
   const { mutate, isLoading } = useMutation(signIn, {
     onSuccess: (data) => {
-      navigate("/");
       updateUserInformation(data);
-      Toast({ message: `Welcome to ${userInfo.userName} ! `, type: "SUCCESS" });
     },
     onError: (error) => {
-      console.log(error);
       Toast({ message: error.message, type: "ERROR" });
     },
   });
-
+  console.log(userInfo);
   useEffect(() => {
     if (userInfo?.isAdmin) {
       navigate("/dashboard");
     } else if (userInfo) {
       navigate("/");
+      Toast({ message: `Welcome to ${userInfo.userName} ! `, type: "SUCCESS" });
     }
   }, [userInfo, isLoading, navigate]);
   //on submit

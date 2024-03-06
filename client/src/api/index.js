@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useAppContext } from "../context/AppContext";
 
 const API_BASE_URL = "http://localhost:5000";
 
@@ -20,7 +19,7 @@ export const signUp = async (userData) => {
     return data; // Returning the data received from the server
   } catch (error) {
     console.error("Sign In Error:", error);
-    throw new Error("Failed to Sign Up"); // You might want to customize the error message
+    throw new Error(error.message); // You might want to customize the error message
   }
 };
 export const validateToken = async () => {
@@ -31,6 +30,6 @@ export const validateToken = async () => {
     return data;
   } catch (error) {
     console.error("Sign In Error:", error);
-    throw new Error("Failed to Validation");
+    throw new Error(error.message);
   }
 };

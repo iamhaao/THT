@@ -6,7 +6,6 @@ export const AppContextProvider = ({ children }) => {
 
   const updateUserInformation = (data) => {
     setUserInfo(data);
-    localStorage.setItem("userInfo", JSON.stringify(data));
   };
   return (
     <AppContext.Provider
