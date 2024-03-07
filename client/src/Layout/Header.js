@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
-import { HiOutlineFilm } from "react-icons/hi";
+import { HiLogin, HiOutlineFilm } from "react-icons/hi";
 import { TbCrown } from "react-icons/tb";
 import { RiContactsFill } from "react-icons/ri";
 import { RiBox3Fill } from "react-icons/ri";
 import { FiHeart } from "react-icons/fi";
+import { useAppContext } from "../context/AppContext";
 
 function Header() {
+  const { userInfo } = useAppContext();
+
   return (
     <div className="bg-main shadow-md sticky top-0 z-20 ">
       <div className=" container mx-auto py-6 px-2 lg:grid gap-10 grid-cols-7 justify-between">
@@ -61,10 +64,29 @@ function Header() {
             Contact
           </NavLink>
           <NavLink
-            to="/sign-in"
-            className="hover:text-subMain bg-subMain p-2 rounded hover:bg-dry transitions text-white flex gap-2 justify-end items-center"
+            to={
+              userInfo?.isAdmin
+                ? "/dashboard"
+                : userInfo
+                ? "/profile"
+                : "/sign-in"
+            }
+            className="hover:text-subMain transitions text-white flex gap-2 justify-end items-center"
           >
-            Sign In
+            {userInfo ? (
+              <img
+                src={userInfo?.avatar ? userInfo?.avatar : "/images/user.png"}
+                alt={userInfo?.name}
+                className="w-8 h-8 rounded-full border object-cover border-subMain"
+              />
+            ) : (
+              <>
+                <div className="flex bg-subMain p-2 rounded-lg hover:bg-white hover:text-dry">
+                  <HiLogin className="w-6 h-6" />
+                  <p>Login</p>
+                </div>
+              </>
+            )}
           </NavLink>
           <NavLink
             to="/favorite"
