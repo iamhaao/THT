@@ -8,9 +8,9 @@ import { Input } from "../shared/input";
 import { InlineError } from "../shared/Notification/Error";
 import { LuEyeOff, LuEye } from "react-icons/lu";
 import { FiLogIn } from "react-icons/fi";
-import { signUp } from "../api";
+import { signUp } from "../api/auth";
 import { useMutation } from "react-query";
-import Toast from "../components/Toast";
+import Toast from "../shared/Toast";
 import { useAppContext } from "../context/AppContext";
 function SignUp() {
   const navigate = useNavigate();

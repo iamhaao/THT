@@ -19,7 +19,7 @@ export const verifyToken = async (req, res, next) => {
     return res.status(401).json({ message: error.message });
   }
 };
-export const admin = (req, res, next) => {
+export const isAdmin = (req, res, next) => {
   try {
     if (req.user && req.user.isAdmin) {
       next();
