@@ -40,8 +40,8 @@ export const signUp = async (req, res) => {
 };
 
 export const signIn = async (req, res) => {
-  const { username, password } = req.body;
-  const user = await User.findOne({ username });
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
   if (!user) {
     return res.status(404).json({ message: "User not found" });
   }
@@ -56,7 +56,7 @@ export const signIn = async (req, res) => {
     maxAge: 24 * 60 * 60 * 1000, // 1 day
   });
   res.header("auth_token", token);
-  res.status(200).json({ user });
+  res.status(200).json({ user ,token});
 };
 
 export const signOut = async (req, res) => {
