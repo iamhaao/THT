@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 
 export const signUp = async (req, res) => {
   try {
-    const { email, name, password, phone, address, dob } = req.body;
+    const { email, fullName, password, phone, address, dob } = req.body;
 
     // check if user exists
     const isExists = await User.findOne({ email });
@@ -19,7 +19,7 @@ export const signUp = async (req, res) => {
 
     const user = new User({
       email,
-      fullName: name,
+      fullName: fullName,
       password: hashedPassword,
       phone,
       address,
@@ -56,27 +56,26 @@ export const signIn = async (req, res) => {
     maxAge: 24 * 60 * 60 * 1000, // 1 day
   });
   res.header("auth_token", token);
-  res.status(200).json({ user ,token});
+  res.status(200).json({ user, token });
 };
 
 export const signOut = async (req, res) => {
-  const token = req.header("auth_token");
-  // destroy token
-  // destroyToken(token);
-
   res.clearCookie("auth_token");
+  res.header("auth_token", "");
   res.status(200).json({ message: "Logged out successfully" });
 };
 
 export const changePassword = async (req, res) => {
-  const { oldPassword, newPassword } = req.body;
+  let { oldPassword, newPassword } = req.body;
   const user = await User.findById(req.user._id);
-  const isMatch = await user.comparePassword(oldPassword);
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
   if (!isMatch) {
     return res.status(400).json({ message: "Invalid credentials" });
   }
+  newPassword = await bcrypt.hash(newPassword, 10);
   user.password = newPassword;
   await user.save();
+  const token = generateToken(user._id);
   res.header("auth_token", token);
   res.status(200).json({ message: "Password changed successfully" });
 };
@@ -86,10 +85,10 @@ export const signUpPremium = async (req, res) => {
   const packagePremium = req.body.packagePremium;
 
   // search package premium by id
-  //   const isExists = await PackagePremium.findById(packagePremium);
-  //   if (!isExists) {
-  //     return res.status(404).json({ message: "Package premium not found" });
-  //   }
+  const isExists = await PackagePremium.findById(packagePremium);
+  if (!isExists) {
+    return res.status(404).json({ message: "Package premium not found" });
+  }
   user.premium.exp = new Date(
     new Date().getTime() + packagePremium * 24 * 60 * 60 * 1000
   );
@@ -98,6 +97,16 @@ export const signUpPremium = async (req, res) => {
   res.status(200).json({ message: "Upgrade to premium successfully" });
 };
 
+export const updateProfile = async (req, res) => {
+  const user = await User.findById(req.user._id);
+  const { fullName, phone, dob } = req.body;
+  user.fullName = fullName;
+  user.phone = phone;
+  user.dob = dob;
+  await user.save();
+  res.status(200).json({ user });
+};
+
 export const validateToken = async (req, res) => {
-  res.status(200).json(req.user);
+  res.status(200).json({ user: req.user });
 };

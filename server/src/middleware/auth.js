@@ -31,3 +31,18 @@ export const isAdmin = (req, res, next) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+export const isLoginWithTokenHeader = async (req, res, next) => {
+  try {
+    const token = req.header("auth_token");
+    if (!token) {
+      res.status(401);
+      throw new Error("Not authorized, token failed");
+    }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    req.user = await User.findById(decoded.id).select("-password");
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: error.message });
+  }
+};
