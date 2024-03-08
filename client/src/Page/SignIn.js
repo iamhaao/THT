@@ -4,8 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginValidation } from "../shared/validation/userValidation";
-import Toast from "../components/Toast";
-import { signIn } from "../api";
+import Toast from "../shared/Toast";
+import { signIn } from "../api/auth";
 import { Input } from "../shared/input";
 import { InlineError } from "../shared/Notification/Error";
 import { FiLogIn } from "react-icons/fi";
@@ -17,6 +17,7 @@ function SignIn() {
   const [isShowPass, setIsShowPass] = useState(false);
 
   const { updateUserInformation, userInfo } = useAppContext();
+  console.log(userInfo);
   const {
     register,
     handleSubmit,

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useQuery } from "react-query";
-import { validateToken } from "../api/index";
+import { validateToken } from "../api/auth";
 const AppContext = React.createContext(undefined);
 
 export const AppContextProvider = ({ children }) => {
