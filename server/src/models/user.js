@@ -52,16 +52,19 @@ const userSchema = new mongoose.Schema({
   favoriteMovies: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Movie",
+      ref: "Movies",
     },
   ],
   watchHistory: [
     {
       movieId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Movie",
+        ref: "Movies",
       },
-      watchedOn: Date,
+      watchedOn: {
+        type: Date,
+        default: Date.now()
+      }
     },
   ],
 });

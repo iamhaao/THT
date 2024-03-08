@@ -1,4 +1,6 @@
 import Movie from "../models/movie.model.js";
+import jwt from "jsonwebtoken";
+import User from "../models/user.js";
 
 const createMovie = async (req, res, next) => {
   try {
@@ -98,10 +100,27 @@ const updateMovie = async (req, res, next) => {
     res.status(400).json({ message: error.message });
   }
 };
+
 const getMovieById = async (req, res, next) => {
+  const token = req.cookies["auth_token"];
   try {
     const movie = await Movie.findById(req.params.id);
     if (movie) {
+      if (token) {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+        const user = await User.findById(decoded.id).select("-password");
+        const arrWatchHistories = user.watchHistory;
+        //check moive exit in list watch histories
+        // console.log(user.watchHistory[0]._id)
+        // console.log(arrWatchHistories)
+        // for(let item in arrWatchHistories){
+          
+        // }
+      
+        const watchHistory = {"movieId":req.params.id }
+        user.watchHistory.push(watchHistory);
+        await user.save();
+      }
       res.json(movie);
     } else {
       res.status(404);
@@ -145,6 +164,42 @@ const getMovies = async (req, res, next) => {
     res.status(400).json({ message: error.message });
   }
 };
+const createMovieReview = async (req, res, next) => {
+  const movieId = req.params.id;
+  const { rating, comment } = req.body;
+  try {
+    const movie = await Movie.findById(movieId);
+    if (movie) {
+      const review = {
+        userName: req.user.name,
+        userId: req.user._id,
+        userImage: req.user.image,
+        rating: Number(rating),
+        comment,
+      };
+      movie.reviews.push(review);
+      movie.numberOfReviews = movie.reviews.length;
+      const validRatings = movie.reviews.filter(
+        (review) => !isNaN(review.rating)
+      ); // Filter out NaN ratings
+      const sumOfRatings = validRatings.reduce(
+        (acc, review) => acc + review.rating,
+        0
+      );
+
+      movie.rate = movie.rate = sumOfRatings / validRatings.length;
+      await movie.save();
+      res.status(201).json({
+        message: "Review added",
+      });
+    } else {
+      res.status(404);
+      throw new Error("Movie not found");
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
 
 
-export { createMovie, getMovieById, updateMovie, getMovies, deleteMovie }
+export { createMovie, getMovieById, updateMovie, getMovies, deleteMovie, createMovieReview}

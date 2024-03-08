@@ -5,6 +5,7 @@ import {
   changePassword,
   signUpPremium,
   validateToken,
+  historyByUserId
 } from "../Controller/UserController.js";
 import { verifyToken } from "../middleware/auth.js";
 
@@ -18,4 +19,6 @@ router.get("/signout", verifyToken, signOut);
 router.put("/change-password", verifyToken, changePassword);
 router.post("/signup-premium", verifyToken, signUpPremium); // thêm middleware isAdmin
 router.get("/validate-token", verifyToken, validateToken);
+router.get("/histories", verifyToken, historyByUserId);
+
 export default router;

@@ -1,4 +1,4 @@
-import User from "../models/User.js";
+import User from "../models/user.js";
 import { generateToken } from "../middleware/auth.js";
 import bcrypt from "bcryptjs";
 
@@ -100,4 +100,18 @@ export const signUpPremium = async (req, res) => {
 
 export const validateToken = async (req, res) => {
   res.status(200).json(req.user);
+};
+
+export const historyByUserId = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user).populate("watchHistory.movieId");
+    if (user) {
+      res.json(user.watchHistory);
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };
