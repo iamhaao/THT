@@ -6,7 +6,7 @@ import AboutUs from "./Page/AboutUs";
 import Contact from "./Page/Contact";
 import { ProtectedRouter } from "./ProtectRouter";
 import PremiumAccount from "./Page/PremiumAccount";
-import Profile from "./Page/Profile";
+import Profile from "./Page/DashBoard/Profile";
 
 function App() {
   return (
