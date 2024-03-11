@@ -46,18 +46,6 @@ export const signUp = async (userData) => {
     }
   }
 };
-export const validateToken = async () => {
-  try {
-    const { data } = await axios.get(`${API_BASE_URL}/users/validate-token`, {
-      withCredentials: true,
-    });
-    return data;
-  } catch (error) {
-    console.error("Sign In Error:", error);
-    throw new Error(error.message);
-  }
-};
-
 export const signOut = async () => {
   try {
     const { data } = await axios.get(`${API_BASE_URL}/users/signout`, {

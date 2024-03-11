@@ -10,14 +10,15 @@ import { Input } from "../shared/input";
 import { InlineError } from "../shared/Notification/Error";
 import { FiLogIn } from "react-icons/fi";
 import { useMutation } from "react-query";
-import { useAppContext } from "../context/AppContext";
 import { LuEye, LuEyeOff } from "react-icons/lu";
+import { useDispatch, useSelector } from "react-redux";
+import { signInSuccess } from "../redux/userSlice/user.slice";
 function SignIn() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isShowPass, setIsShowPass] = useState(false);
-
-  const { updateUserInformation, userInfo } = useAppContext();
-  console.log(userInfo);
+  const { currentUser } = useSelector((state) => state.user);
+  console.log(currentUser);
   const {
     register,
     handleSubmit,
@@ -27,21 +28,23 @@ function SignIn() {
   });
   const { mutate, isLoading } = useMutation(signIn, {
     onSuccess: (data) => {
-      updateUserInformation(data);
-
-      Toast({ message: `Welcome to Monterhub! `, type: "SUCCESS" });
+      dispatch(signInSuccess(data));
+      Toast({
+        message: `Welcome to Monterhub! `,
+        type: "SUCCESS",
+      });
     },
     onError: (error) => {
       Toast({ message: error.message, type: "ERROR" });
     },
   });
   useEffect(() => {
-    if (userInfo?.isAdmin) {
+    if (currentUser?.isAdmin) {
       navigate("/dashboard");
-    } else if (userInfo) {
+    } else if (currentUser) {
       navigate("/");
     }
-  }, [userInfo, navigate]);
+  }, [currentUser, navigate]);
   //on submit
   const onSubmit = (data) => {
     mutate(data);

@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
-import { useQuery } from "react-query";
-import { validateToken } from "../api/auth";
+
 const AppContext = React.createContext(undefined);
 
 export const AppContextProvider = ({ children }) => {
@@ -9,13 +8,13 @@ export const AppContextProvider = ({ children }) => {
   const updateUserInformation = (data) => {
     setUserInfo(data);
   };
-  const { data: dataUser } = useQuery("validateToken", validateToken, {
-    retry: false,
-  });
+  // const { data: dataUser } = useQuery("validateToken", validateToken, {
+  //   retry: false,
+  // });
   return (
     <AppContext.Provider
       value={{
-        userInfo: userInfo || dataUser,
+        userInfo: userInfo,
         updateUserInformation,
       }}
     >

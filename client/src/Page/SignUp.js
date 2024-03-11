@@ -11,10 +11,12 @@ import { FiLogIn } from "react-icons/fi";
 import { signUp } from "../api/auth";
 import { useMutation } from "react-query";
 import Toast from "../shared/Toast";
-import { useAppContext } from "../context/AppContext";
+import { useSelector, useDispatch } from "react-redux";
+import { signInSuccess } from "../redux/userSlice/user.slice";
 function SignUp() {
   const navigate = useNavigate();
-  const { userInfo } = useAppContext();
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.user);
   const [isShowPass, setIsShowPass] = useState(false);
   const [isShowConfirm, setIsShowConfirm] = useState(false);
   //validate user
@@ -27,7 +29,8 @@ function SignUp() {
   });
   //on submit
   const { mutate, isLoading } = useMutation(signUp, {
-    onSuccess: async () => {
+    onSuccess: async (data) => {
+      dispatch(signInSuccess(data));
       Toast({ message: "Register Account Success !!!", type: "SUCCESS" });
     },
     onError: (error) => {
@@ -41,12 +44,12 @@ function SignUp() {
   };
   //useEffect
   useEffect(() => {
-    if (userInfo?.isAdmin) {
+    if (currentUser?.isAdmin) {
       navigate("/dashboard");
-    } else if (userInfo) {
+    } else if (currentUser) {
       navigate("/");
     }
-  }, [userInfo, navigate]);
+  }, [currentUser, navigate]);
 
   const handleShowPass = (field) => {
     if (field === "password") {
