@@ -1,4 +1,4 @@
-import PremiumPackage from "../models/PremiumPackage.js";
+import PremiumPackage from "../models/premiumPackage.model.js";
 
 export const fetchAllPackage = async (req, res) => {
   try {

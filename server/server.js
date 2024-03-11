@@ -3,10 +3,10 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import categoryRouter from "./src/Routes/Category.js";
-import premiumPacakgeRouter from "./src/Routes/PremiumPackage.js";
+import categoryRouter from "./src/Routes/category.router.js";
+import premiumPacakgeRouter from "./src/Routes/premiumPackage.router.js";
 import movieRouter from "./src/Routes/movie.router.js";
-import userRouter from "./src/Routes/UserRoutes.js";
+import userRouter from "./src/Routes/user.router.js";
 import { connectDB } from "./src/config/connectDB.js";
 
 const app = express();

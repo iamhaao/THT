@@ -1,6 +1,6 @@
 import Movie from "../models/movie.model.js";
 import jwt from "jsonwebtoken";
-import User from "../models/user.js";
+import User from "../models/user.model.js";
 
 const createMovie = async (req, res, next) => {
   try {

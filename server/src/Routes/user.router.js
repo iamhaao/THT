@@ -6,7 +6,7 @@ import {
   signUpPremium,
   validateToken,
   historyByUserId
-} from "../Controller/UserController.js";
+} from "../Controller/user.controller.js";
 import { verifyToken } from "../middleware/auth.js";
 
 import express from "express";

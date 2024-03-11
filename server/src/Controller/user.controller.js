@@ -1,4 +1,4 @@
-import User from "../models/user.js";
+import User from "../models/user.model.js";
 import { generateToken } from "../middleware/auth.js";
 import bcrypt from "bcryptjs";
 
