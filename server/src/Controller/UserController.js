@@ -33,7 +33,7 @@ export const signUp = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
     res.header("auth_token", token);
-    res.status(201).json({ user });
+    res.status(201).json(user);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -56,7 +56,7 @@ export const signIn = async (req, res) => {
     maxAge: 24 * 60 * 60 * 1000, // 1 day
   });
   res.header("auth_token", token);
-  res.status(200).json({ user ,token});
+  res.status(200).json(user);
 };
 
 export const signOut = async (req, res) => {

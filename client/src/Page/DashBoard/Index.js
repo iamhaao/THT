@@ -12,22 +12,19 @@ import Layout from "../../Layout/Layout";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Toast from "../../shared/Toast";
-import { useAppContext } from "../../context/AppContext";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 import { signOut } from "../../api/auth";
-
+import { useDispatch, useSelector } from "react-redux";
+import { signInSuccess } from "../../redux/userSlice/user.slice";
 function SideBar({ children }) {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-
-  const { userInfo, updateUserInformation } = useAppContext();
+  const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const { mutate } = useMutation("Logout", signOut, {
     onSuccess: async (data) => {
-      await queryClient.invalidateQueries("validateToken");
-      updateUserInformation(null, () => {
-        Toast({ message: "Sign out success!!!", type: "SUCCESS" });
-        navigate("/sign-in");
-      });
+      dispatch(signInSuccess(null));
+      Toast({ message: "Sign out success!!!", type: "SUCCESS" });
+      navigate("/sign-in");
     },
     onError: (error) => {
       Toast({ message: error.message, type: "ERROR" });
@@ -38,7 +35,7 @@ function SideBar({ children }) {
     mutate();
   };
 
-  const SideLinks = userInfo?.isAdmin
+  const SideLinks = currentUser?.isAdmin
     ? [
         {
           name: "Dashboard",
@@ -66,7 +63,7 @@ function SideBar({ children }) {
           icon: FaUsers,
         },
       ]
-    : userInfo
+    : currentUser
     ? [
         {
           name: "Update Profle",

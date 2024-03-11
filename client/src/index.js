@@ -4,7 +4,9 @@ import "./index.css";
 import App from "./App";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "react-toastify/dist/ReactToastify.css";
-
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "./redux/store.js";
+import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import reportWebVitals from "./reportWebVitals";
 import { AppContextProvider } from "./context/AppContext";
@@ -18,12 +20,20 @@ const queryClient = new QueryClient({
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <AppContextProvider>
-        <ToastContainer position="bottom-left" autoClose={5000} closeOnClick />
-        <App />
-      </AppContextProvider>
-    </QueryClientProvider>
+    <PersistGate persistor={persistor}>
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <AppContextProvider>
+            <ToastContainer
+              position="bottom-left"
+              autoClose={5000}
+              closeOnClick
+            />
+            <App />
+          </AppContextProvider>
+        </QueryClientProvider>
+      </Provider>
+    </PersistGate>
   </React.StrictMode>
 );
 

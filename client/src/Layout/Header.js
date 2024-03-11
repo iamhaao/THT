@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import { HiLogin, HiOutlineFilm } from "react-icons/hi";
@@ -6,10 +6,9 @@ import { TbCrown } from "react-icons/tb";
 import { RiContactsFill } from "react-icons/ri";
 import { RiBox3Fill } from "react-icons/ri";
 import { FiHeart } from "react-icons/fi";
-import { useAppContext } from "../context/AppContext";
-
+import { useSelector } from "react-redux";
 function Header() {
-  const { userInfo } = useAppContext();
+  const { currentUser } = useSelector((state) => state.user);
 
   return (
     <div className="bg-main shadow-md sticky top-0 z-20 ">
@@ -65,18 +64,20 @@ function Header() {
           </NavLink>
           <NavLink
             to={
-              userInfo?.isAdmin
+              currentUser?.isAdmin
                 ? "/dashboard"
-                : userInfo
+                : currentUser
                 ? "/profile"
                 : "/sign-in"
             }
             className="hover:text-subMain transitions text-white flex gap-2 justify-end items-center"
           >
-            {userInfo ? (
+            {currentUser ? (
               <img
-                src={userInfo?.avatar ? userInfo?.avatar : "/images/user.png"}
-                alt={userInfo?.name}
+                src={
+                  currentUser?.avatar ? currentUser?.avatar : "/images/user.png"
+                }
+                alt={currentUser?.name}
                 className="w-8 h-8 rounded-full border object-cover border-subMain"
               />
             ) : (

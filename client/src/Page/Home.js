@@ -1,9 +1,7 @@
 import React from "react";
 import Layout from "../Layout/Layout";
-import { useAppContext } from "../context/AppContext";
 
 function Home() {
-  const { userInfo } = useAppContext();
   return (
     <Layout>
       <div>
