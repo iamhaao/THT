@@ -18,7 +18,14 @@ function SignIn() {
   const dispatch = useDispatch();
   const [isShowPass, setIsShowPass] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
-  console.log(currentUser);
+  useEffect(() => {
+    if (currentUser) {
+      Toast({
+        message: `Welcome to ${currentUser.fullName} Monterhub! `,
+        type: "SUCCESS",
+      });
+    }
+  }, [currentUser]);
   const {
     register,
     handleSubmit,
@@ -29,10 +36,6 @@ function SignIn() {
   const { mutate, isLoading } = useMutation(signIn, {
     onSuccess: (data) => {
       dispatch(signInSuccess(data));
-      Toast({
-        message: `Welcome to Monterhub! `,
-        type: "SUCCESS",
-      });
     },
     onError: (error) => {
       Toast({ message: error.message, type: "ERROR" });
