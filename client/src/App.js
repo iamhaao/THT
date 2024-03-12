@@ -8,16 +8,24 @@ import { AdminProtectedRouter, ProtectedRouter } from "./ProtectRouter";
 import PremiumAccount from "./Page/PremiumAccount";
 import Profile from "./Page/DashBoard/Profile";
 import AddMovie from "./Page/DashBoard/Admin/AddMovie";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchMovies } from "./redux/movieSlice/movieSlice";
 import { fetchCategories } from "./redux/categorySlice/category.slice";
 import { fetchPackages } from "./redux/packageSlice/packageSlice";
+import { useEffect } from "react";
 
 function App() {
   const dispatch = useDispatch();
-  dispatch(fetchMovies());
-  dispatch(fetchCategories());
-  dispatch(fetchPackages());
+  const { currentUser } = useSelector((state) => state.user);
+  useEffect(() => {
+    dispatch(fetchMovies());
+    dispatch(fetchCategories());
+    dispatch(fetchPackages());
+    if (currentUser) {
+      //get favorite list movies
+    }
+  }, [currentUser]);
+
   return (
     <Router>
       <Routes>
