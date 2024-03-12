@@ -1,8 +1,10 @@
+// categorySlice.js
+
 import { createSlice } from "@reduxjs/toolkit";
 import { getCategoryApi } from "../../api/category";
 
 const initialState = {
-  categories: null,
+  categories: [],
   loading: false,
   error: null,
 };
@@ -11,18 +13,17 @@ const categorySlice = createSlice({
   name: "category",
   initialState,
   reducers: {
-    getCategoriesStart: (state) => {
+    getCategoryStart: (state) => {
       state.loading = true;
       state.error = null;
     },
-    getCategoriesSuccess: (state, action) => {
+    getCategorySuccess: (state, action) => {
       state.loading = false;
-      state.categories = action.payload;
-      state.error = null;
+      state.categories = action.payload; // Assuming payload is an array of categories
     },
-    getCategoriesError: (state, action) => {
+    getCategoryError: (state, action) => {
       state.loading = false;
-      state.error = action.payload;
+      state.error = action.payload; // Assuming payload is the error message
     },
   },
 });
@@ -30,7 +31,6 @@ const categorySlice = createSlice({
 export const { getCategoryStart, getCategorySuccess, getCategoryError } =
   categorySlice.actions;
 
-export default categorySlice.reducer;
 export const fetchCategories = () => async (dispatch) => {
   try {
     dispatch(getCategoryStart());
@@ -38,7 +38,8 @@ export const fetchCategories = () => async (dispatch) => {
 
     dispatch(getCategorySuccess(data));
   } catch (error) {
-    console.log(error);
     dispatch(getCategoryError(error.message));
   }
 };
+
+export default categorySlice.reducer;
