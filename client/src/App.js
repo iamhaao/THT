@@ -4,11 +4,20 @@ import SignIn from "./Page/SignIn";
 import SignUp from "./Page/SignUp";
 import AboutUs from "./Page/AboutUs";
 import Contact from "./Page/Contact";
-import { ProtectedRouter } from "./ProtectRouter";
+import { AdminProtectedRouter, ProtectedRouter } from "./ProtectRouter";
 import PremiumAccount from "./Page/PremiumAccount";
 import Profile from "./Page/DashBoard/Profile";
+import AddMovie from "./Page/DashBoard/Admin/AddMovie";
+import { useDispatch } from "react-redux";
+import { fetchMovies } from "./redux/movieSlice/movieSlice";
+import { fetchCategories } from "./redux/categorySlice/category.slice";
+import { fetchPackages } from "./redux/packageSlice/packageSlice";
 
 function App() {
+  const dispatch = useDispatch();
+  dispatch(fetchMovies());
+  dispatch(fetchCategories());
+  dispatch(fetchPackages());
   return (
     <Router>
       <Routes>
@@ -20,6 +29,9 @@ function App() {
         <Route element={<ProtectedRouter />}>
           <Route path="/premium" element={<PremiumAccount />} />
           <Route path="/profile" element={<Profile />} />
+          <Route element={<AdminProtectedRouter />}>
+            <Route element={<AddMovie />} path="/add-movie" />
+          </Route>
         </Route>
       </Routes>
     </Router>
