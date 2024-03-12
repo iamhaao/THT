@@ -7,6 +7,7 @@ import categoryRouter from "./src/Routes/Category.js";
 import premiumPacakgeRouter from "./src/Routes/PremiumPackage.js";
 import movieRouter from "./src/Routes/movie.router.js";
 import userRouter from "./src/Routes/UserRoutes.js";
+import uploadRouter from "./src/Controller/uploadFile.controller.js";
 import { connectDB } from "./src/config/connectDB.js";
 
 const app = express();
@@ -28,6 +29,7 @@ app.use("/categories", categoryRouter);
 app.use("/packages", premiumPacakgeRouter);
 app.use("/movies", movieRouter);
 app.use("/users", userRouter);
+app.use("upload", uploadRouter);
 
 app.get("/", (req, res) => res.send("API Running"));
 // run server on port 5000
