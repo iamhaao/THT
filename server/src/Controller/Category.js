@@ -11,9 +11,9 @@ export const getCategories = async (req, res) => {
 };
 export const addCategory = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { title } = req.body;
 
-    const newCategory = new Category({ name: name });
+    const newCategory = new Category({ title: title });
     await newCategory.save();
     res.json(newCategory);
   } catch (error) {
@@ -26,7 +26,7 @@ export const updateCategory = async (req, res) => {
   try {
     const category = await Category.findById(req.params.id);
     if (category) {
-      category.name = req.body.name || category.name;
+      category.title = req.body.title || category.title;
       const updatedCategory = await category.save();
       res.status(200).json(updatedCategory);
     } else {

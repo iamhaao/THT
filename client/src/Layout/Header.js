@@ -1,5 +1,5 @@
-import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import { HiLogin, HiOutlineFilm } from "react-icons/hi";
 import { TbCrown } from "react-icons/tb";
@@ -8,6 +8,17 @@ import { RiBox3Fill } from "react-icons/ri";
 import { FiHeart } from "react-icons/fi";
 import { useSelector } from "react-redux";
 function Header() {
+  const [search, setSearch] = useState("");
+  const navigate = useNavigate();
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (search.trim()) {
+      navigate(`/filter/${search}`);
+      setSearch(search);
+    } else {
+      navigate("/filter");
+    }
+  };
   const { currentUser } = useSelector((state) => state.user);
 
   return (
@@ -23,10 +34,11 @@ function Header() {
           </Link>
         </div>
         <div className="col-span-2">
-          <form className="w-full rounded flex">
+          <form className="w-full rounded flex" onSubmit={handleSearch}>
             <input
               placeholder="Search Movie Name From here"
               className="w-full font-medium placeholder:text-border bg-transparent text-sm border border-border rounded-lg px-2 py-2"
+              onChange={(e) => setSearch(e.target.value)}
             />
             <button className="bg-subMain rounded-lg px-2" type="submit">
               <FaSearch />

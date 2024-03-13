@@ -7,7 +7,7 @@ function Layout({ children }) {
     <div className="flex flex-col min-h-screen bg-main text-white">
       <Header />
 
-      <div className="container mx-auto py-10 flex-1">{children}</div>
+      <div className="container mx-auto py-1 flex-1">{children}</div>
       <Footer />
     </div>
   );

@@ -61,6 +61,7 @@ export const signIn = async (req, res) => {
 
 export const signOut = async (req, res) => {
   const token = req.header("auth_token");
+  console.log(token);
   // destroy token
   // destroyToken(token);
 
