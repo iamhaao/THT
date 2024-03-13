@@ -6,15 +6,8 @@ import { Link } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import Loader from "../../shared/Notification/Loader";
 import { RiMovie2Line } from "react-icons/ri";
-import { useDispatch, useSelector } from "react-redux";
-const Swipper = ({ sameClass, movies }) => {
-  const dispatch = useDispatch();
-  const { currentUser } = useSelector((state) => state.user);
 
-  //   //if liked function
-  //   const isLiked = (movie) => {
-  //     return IfMovieLiked(movie);
-  //   };
+const Swipper = ({ sameClass, movies }) => {
   return (
     <Swiper
       direction="vertical"
@@ -27,7 +20,10 @@ const Swipper = ({ sameClass, movies }) => {
       className={sameClass}
     >
       {movies.slice(0, 6).map((movie, index) => (
-        <SwiperSlide key={index} className="relative rounded overflow-hidden ">
+        <SwiperSlide
+          key={index}
+          className="relative w-full rounded overflow-hidden "
+        >
           <img
             src={movie?.image ? movie?.image : ""}
             alt={movie.name}
@@ -48,9 +44,7 @@ const Swipper = ({ sameClass, movies }) => {
                 Watch
               </Link>
               <button
-                className={`bg-white
-                 "text-white
-             hover:text-subMain transitions  px-4 py-3 rounded text-sm bg-opacity-30`}
+                className={`bg-white text-white hover:text-subMain transitions  px-4 py-3 rounded text-sm bg-opacity-30`}
               >
                 <FaHeart />
               </button>

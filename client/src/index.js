@@ -10,6 +10,8 @@ import { Provider } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import reportWebVitals from "./reportWebVitals";
 import { AppContextProvider } from "./context/AppContext";
+import "swiper/css";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
