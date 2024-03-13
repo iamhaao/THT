@@ -4,6 +4,7 @@ import SignIn from "./Page/SignIn";
 import SignUp from "./Page/SignUp";
 import AboutUs from "./Page/AboutUs";
 import Contact from "./Page/Contact";
+import Movies from "./Page/Movies";
 import { AdminProtectedRouter, ProtectedRouter } from "./ProtectRouter";
 import PremiumAccount from "./Page/PremiumAccount";
 import Profile from "./Page/DashBoard/Profile";
@@ -18,7 +19,7 @@ function App() {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
   useEffect(() => {
-    dispatch(fetchMovies());
+    dispatch(fetchMovies({}));
     dispatch(fetchCategories());
     dispatch(fetchPackages());
     if (currentUser) {
@@ -34,6 +35,8 @@ function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/movies" element={<Movies />} />
+        <Route path="/movies/:search" element={<Movies />} />
         <Route element={<ProtectedRouter />}>
           <Route path="/premium" element={<PremiumAccount />} />
           <Route path="/profile" element={<Profile />} />

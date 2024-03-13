@@ -114,10 +114,10 @@ const getMovieById = async (req, res, next) => {
         // console.log(user.watchHistory[0]._id)
         // console.log(arrWatchHistories)
         // for(let item in arrWatchHistories){
-          
+
         // }
-      
-        const watchHistory = {"movieId":req.params.id }
+
+        const watchHistory = { movieId: req.params.id };
         user.watchHistory.push(watchHistory);
         await user.save();
       }
@@ -145,7 +145,7 @@ const getMovies = async (req, res, next) => {
 
     //Load more movies function
     const page = Number(req.query.pageNumber) || 1;
-    const limit = 5;
+    const limit = 8;
     const skip = (page - 1) * limit;
 
     const movies = await Movie.find(query)
@@ -201,5 +201,11 @@ const createMovieReview = async (req, res, next) => {
   }
 };
 
-
-export { createMovie, getMovieById, updateMovie, getMovies, deleteMovie, createMovieReview}
+export {
+  createMovie,
+  getMovieById,
+  updateMovie,
+  getMovies,
+  deleteMovie,
+  createMovieReview,
+};

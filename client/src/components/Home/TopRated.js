@@ -53,9 +53,7 @@ const Swipper = ({ prevEl, nextEl, movies }) => {
           </div>
           <div className="w-full hoveres px-4 gap-6 text-center absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-70 ">
             <button
-              className={`w-12 h-12 flex-colo transitions 
-          bg-white bg-opacity-30
-            hover:bg-subMain rounded-full text-white`}
+              className={`w-12 h-12 flex-colo transitions bg-white bg-opacity-30 hover:bg-subMain rounded-full text-white`}
             >
               <FaHeart />
             </button>

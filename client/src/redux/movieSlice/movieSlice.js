@@ -5,10 +5,13 @@ const initialState = {
   movies: null,
   loading: false,
   error: null,
+  pages: 1,
+  page: 1,
+  totalMovies: null,
 };
 
 const movieSlice = createSlice({
-  name: "movie", // Corrected slice name
+  name: "movie",
   initialState,
   reducers: {
     getMoviesStart: (state) => {
@@ -17,7 +20,10 @@ const movieSlice = createSlice({
     },
     getMoviesSuccess: (state, action) => {
       state.loading = false;
-      state.movies = action.payload;
+      state.movies = action.payload.movies;
+      state.page = action.payload.page;
+      state.pages = action.payload.pages;
+      state.totalMovies = action.payload.totalMovies;
     },
     getMoviesError: (state, action) => {
       state.loading = false;
@@ -31,14 +37,32 @@ export const { getMoviesStart, getMoviesSuccess, getMoviesError } =
 
 export default movieSlice.reducer;
 // Async action creator to fetch movies
-export const fetchMovies = () => async (dispatch) => {
-  try {
-    dispatch(getMoviesStart());
-    const data = await fetchMoviesApi();
+export const fetchMovies =
+  ({
+    category = "",
+    time = "",
+    language = "",
+    rate = "",
+    year = "",
+    search = "",
+    pageNumber = 1,
+  }) =>
+  async (dispatch) => {
+    try {
+      dispatch(getMoviesStart());
+      const data = await fetchMoviesApi(
+        category,
+        time,
+        language,
+        rate,
+        year,
+        search,
+        pageNumber
+      );
 
-    dispatch(getMoviesSuccess(data));
-  } catch (error) {
-    console.log(error);
-    dispatch(getMoviesError(error.message));
-  }
-};
+      dispatch(getMoviesSuccess(data));
+    } catch (error) {
+      console.log(error);
+      dispatch(getMoviesError(error.message));
+    }
+  };

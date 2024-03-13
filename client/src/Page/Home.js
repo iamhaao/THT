@@ -8,13 +8,15 @@ import TopRated from "../components/Home/TopRated";
 
 function Home() {
   const { movies } = useSelector((state) => state.movie);
+  const moviesData = movies ? movies : [];
+
   return (
     <Layout>
       <div className="-mt-10">
-        <Banner movies={movies.movies} />
-        <Population movies={movies.movies} isLoading={false} />
+        <Banner movies={moviesData} />
+        <Population movies={moviesData} isLoading={false} />
         <Promos />
-        <TopRated movies={movies.movies} isLoading={false} />
+        <TopRated movies={moviesData} isLoading={false} />
       </div>
     </Layout>
   );
