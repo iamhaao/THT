@@ -13,10 +13,10 @@ function Header() {
   const handleSearch = (e) => {
     e.preventDefault();
     if (search.trim()) {
-      navigate(`/filter/${search}`);
+      navigate(`/movies/${search}`);
       setSearch(search);
     } else {
-      navigate("/filter");
+      navigate("/movies");
     }
   };
   const { currentUser } = useSelector((state) => state.user);

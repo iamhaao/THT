@@ -1,22 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "../Layout/Layout";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Banner from "../components/Home/Banner";
 import Population from "../components/Home/Population";
 import Promos from "../components/Home/Promos";
 import TopRated from "../components/Home/TopRated";
-
+import { fetchMovies } from "../redux/movieSlice/movieSlice";
+import Toast from "../shared/Toast";
 function Home() {
-  const { movies } = useSelector((state) => state.movie);
-  const moviesData = movies ? movies : [];
-
+  const { movies, error } = useSelector((state) => state.movie);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchMovies({}));
+    if (error) {
+      Toast(error, "ERROR");
+    }
+  }, [dispatch, error]);
   return (
     <Layout>
       <div className="-mt-10">
-        <Banner movies={moviesData} />
-        <Population movies={moviesData} isLoading={false} />
+        <Banner movies={movies} />
+        <Population movies={movies} isLoading={false} />
         <Promos />
-        <TopRated movies={moviesData} isLoading={false} />
+        <TopRated movies={movies} isLoading={false} />
       </div>
     </Layout>
   );
