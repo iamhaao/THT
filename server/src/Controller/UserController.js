@@ -99,15 +99,50 @@ export const signUpPremium = async (req, res) => {
   res.status(200).json({ message: "Upgrade to premium successfully" });
 };
 
-export const validateToken = async (req, res) => {
-  res.status(200).json(req.user);
-};
-
 export const historyByUserId = async (req, res, next) => {
   try {
     const user = await User.findById(req.user).populate("watchHistory.movieId");
     if (user) {
       res.json(user.watchHistory);
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+export const updateUserProfile = async (req, res, next) => {
+  const { name, email, image, phone, bod } = req.body;
+  try {
+    const user = await User.findById(req.user._id);
+    if (user) {
+      user.fullName = name || user.fullName;
+      user.email = email || user.email;
+      user.avatar = image || user.avatar;
+      user.phone = phone || user.phone;
+      user.bod = bod || user.bod;
+
+      const updateUser = await user.save();
+      res.json(updateUser);
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+export const deleteUserProfile = async (req, res, next) => {
+  try {
+    const user = User.findById(req.user._id);
+    if (user) {
+      if (user.isAdmin) {
+        res.status(400);
+        throw new Error("Cant delete admin account");
+      }
+      await user.deleteOne();
+      res.json({ message: "User deleted successfully" });
     } else {
       res.status(404);
       throw new Error("User not found");

@@ -4,8 +4,9 @@ import {
   signOut,
   changePassword,
   signUpPremium,
-  validateToken,
-  historyByUserId
+  historyByUserId,
+  updateUserProfile,
+  deleteUserProfile,
 } from "../Controller/UserController.js";
 import { verifyToken } from "../middleware/auth.js";
 
@@ -17,8 +18,9 @@ router.post("/signup", signUp);
 router.post("/signin", signIn);
 router.get("/signout", verifyToken, signOut);
 router.put("/change-password", verifyToken, changePassword);
-router.post("/signup-premium", verifyToken, signUpPremium); // thêm middleware isAdmin
-router.get("/validate-token", verifyToken, validateToken);
+router.post("/signup-premium", verifyToken, signUpPremium);
+router.delete("/deleteProfile", verifyToken, deleteUserProfile);
+router.put("/update", verifyToken, updateUserProfile);
 router.get("/histories", verifyToken, historyByUserId);
 
 export default router;

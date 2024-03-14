@@ -14,6 +14,7 @@ import { fetchMovies } from "./redux/movieSlice/movieSlice";
 import { fetchCategories } from "./redux/categorySlice/category.slice";
 import { fetchPackages } from "./redux/packageSlice/packageSlice";
 import { useEffect } from "react";
+import DashBoard from "./Page/DashBoard/DashBoard";
 
 function App() {
   const dispatch = useDispatch();
@@ -42,6 +43,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route element={<AdminProtectedRouter />}>
             <Route element={<AddMovie />} path="/add-movie" />
+            <Route element={<DashBoard />} path="/dashboard" />
           </Route>
         </Route>
       </Routes>

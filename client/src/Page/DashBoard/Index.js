@@ -6,6 +6,8 @@ import {
   RiLogoutCircleLine,
   RiMovie2Fill,
 } from "react-icons/ri";
+import { TbPackages } from "react-icons/tb";
+
 import { HiViewGridAdd } from "react-icons/hi";
 import { FiSettings } from "react-icons/fi";
 import Layout from "../../Layout/Layout";
@@ -56,6 +58,11 @@ function SideBar({ children }) {
           name: "Categories",
           link: "/categories",
           icon: HiViewGridAdd,
+        },
+        {
+          name: "Packages Premium",
+          link: "/packages",
+          icon: TbPackages,
         },
         {
           name: "Users",
