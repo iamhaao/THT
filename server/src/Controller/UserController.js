@@ -68,18 +68,33 @@ export const signOut = async (req, res) => {
   res.clearCookie("auth_token");
   res.status(200).json({ message: "Logged out successfully" });
 };
-
 export const changePassword = async (req, res) => {
   const { oldPassword, newPassword } = req.body;
-  const user = await User.findById(req.user._id);
-  const isMatch = await user.comparePassword(oldPassword);
-  if (!isMatch) {
-    return res.status(400).json({ message: "Invalid credentials" });
+
+  try {
+    // Finding the user by ID
+    const user = await User.findById(req.user._id);
+
+    // Checking if the old password matches the stored hashed password
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    // Hashing the new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    // Updating the user's password
+    user.password = hashedPassword;
+    await user.save();
+
+    // Sending the response with success message
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
   }
-  user.password = newPassword;
-  await user.save();
-  res.header("auth_token", token);
-  res.status(200).json({ message: "Password changed successfully" });
 };
 
 export const signUpPremium = async (req, res) => {

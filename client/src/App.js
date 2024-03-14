@@ -15,6 +15,7 @@ import { fetchCategories } from "./redux/categorySlice/category.slice";
 import { fetchPackages } from "./redux/packageSlice/packageSlice";
 import { useEffect } from "react";
 import DashBoard from "./Page/DashBoard/DashBoard";
+import ChangePassword from "./Page/DashBoard/ChangePassword";
 
 function App() {
   const dispatch = useDispatch();
@@ -41,6 +42,8 @@ function App() {
         <Route element={<ProtectedRouter />}>
           <Route path="/premium" element={<PremiumAccount />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/password" element={<ChangePassword />} />
+
           <Route element={<AdminProtectedRouter />}>
             <Route element={<AddMovie />} path="/add-movie" />
             <Route element={<DashBoard />} path="/dashboard" />
