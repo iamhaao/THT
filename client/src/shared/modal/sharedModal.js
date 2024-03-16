@@ -47,7 +47,7 @@ function ShareMovieModal({ modalOpen, setModalOpen, movie }) {
   const url = `${window.location.protocol}//${window.location.host}/movie/${movie._id}`;
   return (
     <MainModal modalOpen={modalOpen} setModalOpen={setModalOpen}>
-      <div className="inline-block sm:w-4/5 border border-border md:w-3/5 lg:w-2/5 w-full align-middle p-10 overflow-y-auto h-full bg-main  text-white rounded-2xl">
+      <div className="inline-block sm:w-4/5 border z-100 relative border-border md:w-3/5 lg:w-2/5 w-full align-middle p-10 overflow-y-auto h-full bg-main  text-white rounded-2xl">
         <h2 className="text-2xl ">
           Share <span className="text-xl font-bold"> '{movie.name}'</span>
         </h2>

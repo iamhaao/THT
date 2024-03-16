@@ -13,9 +13,12 @@ import { InlineError } from "../../shared/Notification/Error";
 import { Link } from "react-router-dom";
 import {
   createReview,
+  fetchSingleMovie,
   resetError,
   resetLoading,
 } from "../../redux/movieSlice/singleMovieSlice";
+import { useMutation } from "react-query";
+import { addReview } from "../../api/movie";
 const Ratings = [
   {
     title: "0-Poor",
@@ -45,7 +48,6 @@ const Ratings = [
 function MovieRates({ movie }) {
   const dispatch = useDispatch();
   //useSelector
-  const { loading, error, success } = useSelector((state) => state.singleMovie);
 
   const { currentUser } = useSelector((state) => state.user);
 
@@ -58,20 +60,21 @@ function MovieRates({ movie }) {
   } = useForm({
     resolver: yupResolver(ReviewValidation),
   });
-  //   //on submit
+
+  const { mutate, isLoading } = useMutation(addReview, {
+    onSuccess: () => {
+      Toast({ message: "Thanks for rating!", type: "SUCCESS" });
+      dispatch(fetchSingleMovie(movie._id));
+    },
+    onError: (error) => {
+      Toast({ message: "Thanks for rating!", type: "ERROR" });
+    },
+  });
+  //on submit
   const onSubmit = (data) => {
-    dispatch(createReview(movie?._id, { ...data }));
+    mutate({ movieId: movie._id, ...data });
   };
-  useEffect(() => {
-    if (error) {
-      Toast({ message: error, type: "ERROR" });
-      dispatch(resetError());
-    }
-    if (success) {
-      Toast({ message: "Created Review", type: "SUCCESS" });
-      dispatch(resetLoading());
-    }
-  }, [success, error, dispatch]);
+
   return (
     <div className="my-12">
       <Titles title="Reviews" Icon={BiSolidBookmark} />
@@ -115,11 +118,11 @@ function MovieRates({ movie }) {
           {/*Submit */}
           {currentUser ? (
             <button
-              disabled={loading}
+              disabled={isLoading}
               type="submit"
               className="bg-subMain text-white py-2 w-full flex-colo rounded "
             >
-              {loading ? "Loading ...." : "Submit"}
+              {isLoading ? "Loading ...." : "Submit"}
             </button>
           ) : (
             <Link

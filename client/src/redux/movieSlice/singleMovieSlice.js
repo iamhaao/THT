@@ -56,13 +56,3 @@ export const fetchSingleMovie = (movieid) => async (dispatch) => {
     dispatch(getSingleMovieError(error.message));
   }
 };
-export const createReview = (movieid, dataRate) => async (dispatch) => {
-  try {
-    dispatch(getSignleMovieStart());
-    await addReview(movieid, dataRate);
-    dispatch(createRateSuccess());
-  } catch (error) {
-    console.log(error);
-    dispatch(getSingleMovieError(error.message));
-  }
-};

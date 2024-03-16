@@ -158,10 +158,10 @@ export const getMovieById = async (movieId) => {
   }
 };
 
-export const addReview = async (movieId, rateData) => {
+export const addReview = async (rateData) => {
   try {
     const { data } = await axios.post(
-      `${API_BASE_URL}/movies/${movieId}/reviews`,
+      `${API_BASE_URL}/movies/${rateData.movieId}/reviews`,
       rateData,
       {
         headers: {

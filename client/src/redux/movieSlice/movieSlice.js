@@ -70,15 +70,3 @@ export const fetchMovies =
       dispatch(getMoviesError(error.message));
     }
   };
-
-// export const fetchSingleMovie = (movieid) => async (dispatch) => {
-//   try {
-//     dispatch(getMoviesStart());
-//     const data = await getMovieById(movieid);
-
-//     dispatch(fetchSingleMovieSucces(data));
-//   } catch (error) {
-//     console.log(error);
-//     dispatch(getMoviesError(error.message));
-//   }
-// };
