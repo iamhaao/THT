@@ -17,12 +17,15 @@ function SingleMovie() {
   const [modalOpen, setModalOpen] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
+  const { movie, loading, error, success } = useSelector(
+    (state) => state.singleMovie
+  );
   useEffect(() => {
     dispatch(fetchSingleMovie(id));
-  }, [dispatch, id]);
+  }, [dispatch, id, success]);
   const sameClass = "w-full gap-6 flex-colo min-h-screen  ";
   //useSelector
-  const { movie, loading, error } = useSelector((state) => state.singleMovie);
+
   const { movies } = useSelector((state) => state.movie);
   const relatedMovies = movies?.filter((m) => m.category === movie?.category);
 

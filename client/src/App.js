@@ -19,6 +19,7 @@ import ChangePassword from "./Page/DashBoard/ChangePassword";
 import SingleMovie from "./Page/SingleMovie";
 import FavoriteMovies from "./Page/DashBoard/FavoriteMovie";
 import { fetchFavoriteMovie } from "./redux/userSlice/favoriteSlice";
+import WatchPage from "./Page/WatchMovie";
 
 function App() {
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ function App() {
       //get favorite list movies
       dispatch(fetchFavoriteMovie());
     }
-  }, [currentUser]);
+  }, [currentUser, dispatch]);
 
   return (
     <Router>
@@ -50,6 +51,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/password" element={<ChangePassword />} />
           <Route path="/favorites" element={<FavoriteMovies />} />
+          <Route path="/watch/:id" element={<WatchPage />} />
 
           <Route element={<AdminProtectedRouter />}>
             <Route element={<AddMovie />} path="/add-movie" />

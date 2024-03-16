@@ -166,14 +166,15 @@ const getMovies = async (req, res, next) => {
 const createMovieReview = async (req, res, next) => {
   const movieId = req.params.id;
   const { rating, comment } = req.body;
+  console.log(req.body);
   try {
     const movie = await Movie.findById(movieId);
     if (movie) {
       const review = {
-        userName: req.user.name,
+        userName: req.user.fullName,
         userId: req.user._id,
         userImage: req.user.image,
-        rating: Number(rating),
+        rating,
         comment,
       };
       movie.reviews.push(review);
