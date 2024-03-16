@@ -23,7 +23,6 @@ function SingleMovie() {
   const sameClass = "w-full gap-6 flex-colo min-h-screen  ";
   //useSelector
   const { movie, loading, error } = useSelector((state) => state.singleMovie);
-  console.log(movie);
   const { movies } = useSelector((state) => state.movie);
   const relatedMovies = movies?.filter((m) => m.category === movie?.category);
 
@@ -40,7 +39,7 @@ function SingleMovie() {
 
   return (
     <Layout>
-      {loading ? (
+      {loading || !movie ? (
         <div className={sameClass}>
           <Loader />
         </div>

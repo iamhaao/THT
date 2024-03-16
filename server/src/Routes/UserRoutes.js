@@ -10,6 +10,7 @@ import {
   getLikedMovies,
   addLikedMovies,
   deleteLikedMovies,
+  deleteAllLikedMovies,
 } from "../Controller/UserController.js";
 import { verifyToken } from "../middleware/auth.js";
 
@@ -25,6 +26,7 @@ router.post("/signup-premium", verifyToken, signUpPremium);
 router.delete("/deleteProfile", verifyToken, deleteUserProfile);
 router.put("/update", verifyToken, updateUserProfile);
 router.get("/favorites", verifyToken, getLikedMovies);
+router.delete("/favorites", verifyToken, deleteAllLikedMovies);
 router.post("/favorites/:movieId", verifyToken, addLikedMovies);
 router.delete("/favorites/:movieId", verifyToken, deleteLikedMovies);
 router.get("/histories", verifyToken, historyByUserId);

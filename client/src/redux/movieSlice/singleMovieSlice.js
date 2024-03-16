@@ -36,7 +36,6 @@ export const fetchSingleMovie = (movieid) => async (dispatch) => {
   try {
     dispatch(getSignleMovieStart());
     const data = await getMovieById(movieid);
-    console.log(data);
     dispatch(getSingleMovieSuccess(data));
   } catch (error) {
     console.log(error);

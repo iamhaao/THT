@@ -6,6 +6,7 @@ import categoryReducer from "./categorySlice/category.slice";
 import packageReducer from "./packageSlice/packageSlice";
 import movieReducer from "./movieSlice/movieSlice";
 import singleMovieReducer from "./movieSlice/singleMovieSlice";
+import favoriteReducer from "./userSlice/favoriteSlice";
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   package: packageReducer,
   movie: movieReducer,
   singleMovie: singleMovieReducer,
+  favorite: favoriteReducer,
 });
 const persistConfig = {
   key: "root",

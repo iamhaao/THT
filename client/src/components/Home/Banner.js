@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import FlexMovieItems from "../FlexMovieItems";
@@ -6,31 +6,26 @@ import { Link } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import Loader from "../../shared/Notification/Loader";
 import { RiMovie2Line } from "react-icons/ri";
-import { IfMovieLiked } from "../../context/Functionaltes";
+import { IfMovieLiked, LikeMovie } from "../../context/Functionaltes";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUserSuccess } from "../../redux/userSlice/user.slice";
-import { useMutation } from "react-query";
-import { addFavorite } from "../../api/movie";
+import { resetError } from "../../redux/userSlice/favoriteSlice";
 import Toast from "../../shared/Toast";
 const Swipper = ({ sameClass, movies }) => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
+  const { error } = useSelector((state) => state.favorite);
+  console.log(error);
   const isLiked = (movie) => {
     return IfMovieLiked(movie);
   };
-  const { mutate } = useMutation(addFavorite, {
-    onSuccess: (data) => {
-      Toast({ message: "Added to favorites successfully!", type: "SUCCESS" });
-    },
-    onError: (error) => {
-      Toast({ message: error.message, type: "ERROR" });
-    },
-  });
 
-  const likeMovie = (movie) => {
-    dispatch(updateUserSuccess(movie));
-    mutate(movie);
-  };
+  useEffect(() => {
+    if (error) {
+      Toast({ message: error, type: "ERROR" });
+      dispatch(resetError());
+    }
+  }, [dispatch, error]);
+
   return (
     <Swiper
       direction="vertical"
@@ -67,7 +62,7 @@ const Swipper = ({ sameClass, movies }) => {
                 Watch
               </Link>
               <button
-                onClick={() => likeMovie(movie._id)}
+                onClick={() => LikeMovie(movie, dispatch, currentUser)}
                 className={`bg-white ${
                   isLiked(movie) ? "text-subMain" : "text-white"
                 } hover:text-subMain transitions  px-4 py-3 rounded text-sm bg-opacity-30`}

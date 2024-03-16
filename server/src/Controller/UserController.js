@@ -1,6 +1,7 @@
 import User from "../models/user.js";
 import { generateToken } from "../middleware/auth.js";
 import bcrypt from "bcryptjs";
+import Movie from "../models/movie.model.js";
 
 export const signUp = async (req, res) => {
   try {
@@ -179,26 +180,50 @@ export const getLikedMovies = async (req, res, next) => {
     res.status(400).json({ message: error.message });
   }
 };
+export const deleteAllLikedMovies = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id).populate("likedMovies");
+    if (user) {
+      user.likedMovies = [];
+      await user.save();
+      res.status(200).json({ message: "Delete Success!" });
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
 export const addLikedMovies = async (req, res, next) => {
   const { movieId } = req.params;
   try {
-    const user = await User.findById(req.user._id);
-    if (user) {
-      // if (user?.likedMovies) {
-      //   const isMovieLiked = user.likedMovies.forEach(
-      //     (movie) => movie.toString() === movieId
-      //   );
-      //   if (isMovieLiked) {
-      //     res.status(400);
-      //     throw new Error("Movie already liked");
-      //   }
-      // }
-      user.likedMovies.push(movieId);
-      await user.save();
-      res.json(movieId);
-    } else {
+    const moive = await Movie.findById(movieId);
+    if (!moive) {
       res.status(404);
       throw new Error("Movie not found");
+    }
+    const user = await User.findById(req.user._id);
+    if (user) {
+      if (user?.likedMovies) {
+        const isMovieLiked = user.likedMovies.some(
+          (movie) => movie._id.toString() === movieId
+        );
+
+        if (isMovieLiked) {
+          res.status(400);
+          throw new Error("Movie already liked");
+        }
+      }
+      user.likedMovies.push(movieId);
+      await user.save();
+      const userUpdated = await User.findById(req.user._id).populate(
+        "likedMovies"
+      );
+      res.status(200).json(userUpdated.likedMovies);
+    } else {
+      res.status(404);
+      throw new Error("User not found");
     }
   } catch (error) {
     res.status(400).json({ message: error.message });
