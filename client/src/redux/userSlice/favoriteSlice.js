@@ -46,10 +46,8 @@ export const fetchFavoriteMovie = (movieid) => async (dispatch) => {
   try {
     dispatch(getFavoriteStart());
     const data = await getFavorite(movieid);
-    console.log(data);
     dispatch(getFavoriteSuccess(data));
   } catch (error) {
-    console.log(error);
     dispatch(getFavoriteError(error.message));
   }
 };
@@ -59,7 +57,6 @@ export const deleteAllFavoriteMovie = () => async (dispatch) => {
     await deleteAllFavorite();
     dispatch(getFavoriteSuccess(null));
   } catch (error) {
-    console.log(error);
     dispatch(getFavoriteError(error.message));
   }
 };

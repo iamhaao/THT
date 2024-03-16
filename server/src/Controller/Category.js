@@ -24,9 +24,11 @@ export const addCategory = async (req, res) => {
 
 export const updateCategory = async (req, res) => {
   try {
+    const { title } = req.body;
+    console.log(title);
     const category = await Category.findById(req.params.id);
     if (category) {
-      category.title = req.body.title || category.title;
+      category.title = title || category.title;
       const updatedCategory = await category.save();
       res.status(200).json(updatedCategory);
     } else {

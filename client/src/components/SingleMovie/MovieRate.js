@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Titles from "../Titles";
 import { BiSolidBookmark } from "react-icons/bi";
-import { Input, Message, Select } from "../../shared/input";
+import { Input, Select } from "../../shared/input";
 import Rating from "../Start";
 import { Empty } from "../../shared/Notification/Empty";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +11,14 @@ import { ReviewValidation } from "../../shared/validation/movieValidation";
 import Toast from "../../shared/Toast";
 import { InlineError } from "../../shared/Notification/Error";
 import { Link } from "react-router-dom";
-// import { reviewMovieAction } from "../../Redux/Actions/MoviesAction";
+import {
+  createReview,
+  fetchSingleMovie,
+  resetError,
+  resetLoading,
+} from "../../redux/movieSlice/singleMovieSlice";
+import { useMutation } from "react-query";
+import { addReview } from "../../api/movie";
 const Ratings = [
   {
     title: "0-Poor",
@@ -41,11 +48,8 @@ const Ratings = [
 function MovieRates({ movie }) {
   const dispatch = useDispatch();
   //useSelector
-  // const { isLoading, isError, isSuccess } = useSelector(
-  //   (state) => state.createReview
-  // );
 
-  const { currentUSer } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
 
   //validate review
   const {
@@ -56,23 +60,28 @@ function MovieRates({ movie }) {
   } = useForm({
     resolver: yupResolver(ReviewValidation),
   });
-  //   //on submit
-  //   const onSubmit = (data) => {
-  //     dispatch(reviewMovieAction(movie?._id, { ...data }));
-  //   };
-  //   useEffect(() => {
-  //     if (isError) {
-  //       toast.error(isError);
-  //       dispatch({ type: "CREATE_REVIEW_RESET" });
-  //     }
-  //   }, [isError, dispatch]);
+
+  const { mutate, isLoading } = useMutation(addReview, {
+    onSuccess: () => {
+      Toast({ message: "Thanks for rating!", type: "SUCCESS" });
+      dispatch(fetchSingleMovie(movie._id));
+    },
+    onError: (error) => {
+      Toast({ message: "Thanks for rating!", type: "ERROR" });
+    },
+  });
+  //on submit
+  const onSubmit = (data) => {
+    mutate({ movieId: movie._id, ...data });
+  };
+
   return (
     <div className="my-12">
       <Titles title="Reviews" Icon={BiSolidBookmark} />
       <div className="mt-10 xl:grid flex-colo grid-cols-5 gap-12 bg-dry xs:p-10 py-10 px-2 sm:p-20 rounded  ">
         {/*Write review */}
         <form
-          //   onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onSubmit)}
           className="xl:col-span-2 w-full flex flex-col gap-8"
         >
           <h3 className="text-xl text-text font-semibold ">
@@ -107,14 +116,13 @@ function MovieRates({ movie }) {
           {errors.comment && <InlineError text={errors.comment.message} />}
 
           {/*Submit */}
-          {currentUSer ? (
+          {currentUser ? (
             <button
-              // disabled={isLoading}
+              disabled={isLoading}
               type="submit"
               className="bg-subMain text-white py-2 w-full flex-colo rounded "
             >
-              {/* {isLoading ? "Loading ...." : "Submit"} */}
-              Submit
+              {isLoading ? "Loading ...." : "Submit"}
             </button>
           ) : (
             <Link

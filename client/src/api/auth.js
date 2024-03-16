@@ -87,14 +87,17 @@ export const uploadProfile = async (userData) => {
     }
   }
 };
-export const deleteProfile = async () => {
+export const deleteProfile = async (userId) => {
   try {
-    const { data } = await axios.delete(`${API_BASE_URL}/users/deleteProfile`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    });
+    const { data } = await axios.delete(
+      `${API_BASE_URL}/users/deleteProfile/${userId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
 
     return data; // Returning the data received from the server
   } catch (error) {
@@ -128,6 +131,26 @@ export const changePassword = async (passwordData) => {
     } else {
       // Otherwise, use a generic error message
       throw new Error("An error occurred during sign up.");
+    }
+  }
+};
+
+export const getAllUser = async () => {
+  try {
+    const { data } = await axios.get(`${API_BASE_URL}/users`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+    return data;
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.message) {
+      // If the server provides a specific error message, use it
+      throw new Error(error.response.data.message);
+    } else {
+      // Otherwise, use a generic error message
+      throw new Error("An error occurred during call api!");
     }
   }
 };

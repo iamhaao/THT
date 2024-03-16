@@ -3,6 +3,14 @@ import { generateToken } from "../middleware/auth.js";
 import bcrypt from "bcryptjs";
 import Movie from "../models/movie.model.js";
 
+export const getAllUser = async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.json(users);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
 export const signUp = async (req, res) => {
   try {
     const { email, name, password, phone, address, dob } = req.body;
@@ -151,7 +159,8 @@ export const updateUserProfile = async (req, res, next) => {
 };
 export const deleteUserProfile = async (req, res, next) => {
   try {
-    const user = User.findById(req.user._id);
+    const { userId } = req.params;
+    const user = User.findById(userId);
     if (user) {
       if (user.isAdmin) {
         res.status(400);

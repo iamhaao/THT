@@ -2,14 +2,10 @@ import React, { useEffect } from "react";
 import SideBar from "./Index";
 import Table from "../../components/Table";
 import { useDispatch, useSelector } from "react-redux";
-// import {
-//   deleteFavoriteMoviesAction,
-//   getFavoriteMoviesAction,
-// } from "../../Redux/Actions/userActions";
 import Toast from "../../shared/Toast";
 import Loader from "../../shared/Notification/Loader";
 import { Empty } from "../../shared/Notification/Empty";
-import { fetchFavorite } from "../../redux/userSlice/user.slice";
+import { fetchFavoriteMovie } from "../../redux/userSlice/favoriteSlice";
 import { deleteAllFavoriteMovie } from "../../redux/userSlice/favoriteSlice";
 
 function FavoriteMovies() {
@@ -26,7 +22,6 @@ function FavoriteMovies() {
   };
   // useEffect
   useEffect(() => {
-    dispatch(fetchFavorite());
     if (error) {
       Toast({ message: error, type: "ERROR" });
     }
