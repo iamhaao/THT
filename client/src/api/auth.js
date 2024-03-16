@@ -87,14 +87,17 @@ export const uploadProfile = async (userData) => {
     }
   }
 };
-export const deleteProfile = async () => {
+export const deleteProfile = async (userId) => {
   try {
-    const { data } = await axios.delete(`${API_BASE_URL}/users/deleteProfile`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    });
+    const { data } = await axios.delete(
+      `${API_BASE_URL}/users/deleteProfile/${userId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
 
     return data; // Returning the data received from the server
   } catch (error) {

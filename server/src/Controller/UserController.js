@@ -159,7 +159,8 @@ export const updateUserProfile = async (req, res, next) => {
 };
 export const deleteUserProfile = async (req, res, next) => {
   try {
-    const user = User.findById(req.user._id);
+    const { userId } = req.params;
+    const user = User.findById(userId);
     if (user) {
       if (user.isAdmin) {
         res.status(400);

@@ -13,6 +13,10 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    resetUser: (state) => {
+      state.loading = false;
+      state.error = null;
+    },
     startCall: (state) => {
       state.loading = false;
       state.error = null;
@@ -43,13 +47,13 @@ export const {
   startCall,
   userError,
   fetchUserSuccess,
+  resetUser,
 } = userSlice.actions;
 export default userSlice.reducer;
 export const fetchAllUser = () => async (dispatch) => {
   try {
     dispatch(startCall());
     const data = await getAllUser();
-    console.log(data);
     dispatch(fetchUserSuccess(data));
   } catch (error) {
     console.log(error);
