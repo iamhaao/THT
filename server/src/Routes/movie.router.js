@@ -1,14 +1,19 @@
 import express from "express";
-import { createMovie, getMovieById, updateMovie, getMovies, deleteMovie, createMovieReview } from "../Controller/movie.controller.js";
-import { verifyToken } from "../middleware/auth.js";
+import {
+  createMovie,
+  getMovieById,
+  updateMovie,
+  getMovies,
+  deleteMovie,
+  createMovieReview,
+} from "../Controller/movie.controller.js";
+import { isAdmin, verifyToken } from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.post("/", verifyToken, createMovie);
-router.put("/:id", verifyToken, updateMovie);
-router.delete("/:id", verifyToken, deleteMovie);
-
-
+router.post("/", verifyToken, isAdmin, createMovie);
+router.put("/:id", verifyToken, isAdmin, updateMovie);
+router.delete("/:id", verifyToken, isAdmin, deleteMovie);
 router.get("/", getMovies);
 router.get("/:id", getMovieById);
 router.post("/:id/reviews", verifyToken, createMovieReview);

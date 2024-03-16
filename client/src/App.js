@@ -21,6 +21,7 @@ import FavoriteMovies from "./Page/DashBoard/FavoriteMovie";
 import { fetchFavoriteMovie } from "./redux/userSlice/favoriteSlice";
 import WatchPage from "./Page/WatchMovie";
 import Users from "./Page/DashBoard/Admin/User";
+import Categories from "./Page/DashBoard/Admin/Categories";
 
 function App() {
   const dispatch = useDispatch();
@@ -56,6 +57,7 @@ function App() {
 
           <Route element={<AdminProtectedRouter />}>
             <Route element={<AddMovie />} path="/add-movie" />
+            <Route element={<Categories />} path="/categories" />
             <Route element={<DashBoard />} path="/dashboard" />
             <Route element={<Users />} path="/users" />
           </Route>

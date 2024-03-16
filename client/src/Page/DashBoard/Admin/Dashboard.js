@@ -10,6 +10,9 @@ import Loader from "../../../shared/Notification/Loader";
 import { Empty } from "../../../shared/Notification/Empty";
 // import { deleteMovieAction } from "../../../Redux/Actions/MoviesAction";
 import { fetchAllUser } from "../../../redux/userSlice/user.slice";
+import { useMutation } from "react-query";
+import { deleteMovieById } from "../../../api/movie";
+import { fetchMovies } from "../../../redux/movieSlice/movieSlice";
 function DashBoard() {
   const dispatch = useDispatch();
   const {
@@ -25,17 +28,24 @@ function DashBoard() {
   const { loading, error, movies, totalMovies } = useSelector(
     (state) => state.movie
   );
-  //   //delete
-  //   const { isLoading: deleteLoading, isError: deleteError } = useSelector(
-  //     (state) => state.deleteMovie
-  //   );
 
-  //   //delete movie handler
-  //   const deleteMovieHandler = (id) => {
-  //     window.confirm("Are you sure want to delete this movie") &&
-  //       dispatch(deleteMovieAction(id));
-  //   };
+  //delete
+  const { mutate, isSuccess } = useMutation(deleteMovieById, {
+    onSuccess: () => {
+      Toast({ message: "Deleted success!", type: "SUCCESS" });
+    },
+    onError: (error) => {
+      Toast({ message: error.message, type: "ERROR" });
+    },
+  });
+  //delete movie handler
+  const deleteMovieHandler = (id) => {
+    window.confirm("Are you sure want to delete this movie") && mutate(id);
+  };
 
+  useEffect(() => {
+    dispatch(fetchMovies({}));
+  }, [isSuccess, dispatch]);
   //useEffect
   useEffect(() => {
     //get all users
@@ -95,7 +105,7 @@ function DashBoard() {
         <Table
           data={movies?.slice(0, 5)}
           admin={true}
-          //   onDeleteHandler={deleteMovieHandler}
+          onDeleteHandler={deleteMovieHandler}
         />
       ) : (
         <Empty message="You have no Movies" />
