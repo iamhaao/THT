@@ -16,6 +16,8 @@ import { fetchPackages } from "./redux/packageSlice/packageSlice";
 import { useEffect } from "react";
 import DashBoard from "./Page/DashBoard/DashBoard";
 import ChangePassword from "./Page/DashBoard/ChangePassword";
+import { fetchFavorite } from "./redux/userSlice/user.slice";
+import SingleMovie from "./Page/SingleMovie";
 
 function App() {
   const dispatch = useDispatch();
@@ -24,6 +26,7 @@ function App() {
     dispatch(fetchMovies({}));
     dispatch(fetchCategories());
     dispatch(fetchPackages());
+    dispatch(fetchFavorite());
     if (currentUser) {
       //get favorite list movies
     }
@@ -39,6 +42,8 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/movies" element={<Movies />} />
         <Route path="/movies/:search" element={<Movies />} />
+        <Route path="/movie/:id" element={<SingleMovie />} />
+
         <Route element={<ProtectedRouter />}>
           <Route path="/premium" element={<PremiumAccount />} />
           <Route path="/profile" element={<Profile />} />

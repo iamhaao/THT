@@ -6,8 +6,31 @@ import { Link } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import Loader from "../../shared/Notification/Loader";
 import { RiMovie2Line } from "react-icons/ri";
-
+import { IfMovieLiked } from "../../context/Functionaltes";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserSuccess } from "../../redux/userSlice/user.slice";
+import { useMutation } from "react-query";
+import { addFavorite } from "../../api/movie";
+import Toast from "../../shared/Toast";
 const Swipper = ({ sameClass, movies }) => {
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.user);
+  const isLiked = (movie) => {
+    return IfMovieLiked(movie);
+  };
+  const { mutate } = useMutation(addFavorite, {
+    onSuccess: (data) => {
+      Toast({ message: "Added to favorites successfully!", type: "SUCCESS" });
+    },
+    onError: (error) => {
+      Toast({ message: error.message, type: "ERROR" });
+    },
+  });
+
+  const likeMovie = (movie) => {
+    dispatch(updateUserSuccess(movie));
+    mutate(movie);
+  };
   return (
     <Swiper
       direction="vertical"
@@ -44,7 +67,10 @@ const Swipper = ({ sameClass, movies }) => {
                 Watch
               </Link>
               <button
-                className={`bg-white text-white hover:text-subMain transitions  px-4 py-3 rounded text-sm bg-opacity-30`}
+                onClick={() => likeMovie(movie._id)}
+                className={`bg-white ${
+                  isLiked(movie) ? "text-subMain" : "text-white"
+                } hover:text-subMain transitions  px-4 py-3 rounded text-sm bg-opacity-30`}
               >
                 <FaHeart />
               </button>

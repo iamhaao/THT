@@ -166,3 +166,57 @@ export const deleteUserProfile = async (req, res, next) => {
     res.status(400).json({ message: error.message });
   }
 };
+export const getLikedMovies = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id).populate("likedMovies");
+    if (user) {
+      res.json(user.likedMovies);
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+export const addLikedMovies = async (req, res, next) => {
+  const { movieId } = req.params;
+  try {
+    const user = await User.findById(req.user._id);
+    if (user) {
+      // if (user?.likedMovies) {
+      //   const isMovieLiked = user.likedMovies.forEach(
+      //     (movie) => movie.toString() === movieId
+      //   );
+      //   if (isMovieLiked) {
+      //     res.status(400);
+      //     throw new Error("Movie already liked");
+      //   }
+      // }
+      user.likedMovies.push(movieId);
+      await user.save();
+      res.json(movieId);
+    } else {
+      res.status(404);
+      throw new Error("Movie not found");
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+export const deleteLikedMovies = async (req, res, next) => {
+  const { movieId } = req.params();
+  try {
+    const user = await User.findById(req.user._id);
+    if (user) {
+      user.likedMovies.pull({ _id: movieId });
+      await user.save();
+      res.status(200).json({ message: "Remove sucessfully movie " });
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
