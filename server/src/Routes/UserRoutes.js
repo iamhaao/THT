@@ -11,13 +11,14 @@ import {
   addLikedMovies,
   deleteLikedMovies,
   deleteAllLikedMovies,
+  getAllUser,
 } from "../Controller/UserController.js";
-import { verifyToken } from "../middleware/auth.js";
+import { isAdmin, verifyToken } from "../middleware/auth.js";
 
 import express from "express";
 
 const router = express.Router();
-
+router.get("/", verifyToken, isAdmin, getAllUser);
 router.post("/signup", signUp);
 router.post("/signin", signIn);
 router.get("/signout", verifyToken, signOut);

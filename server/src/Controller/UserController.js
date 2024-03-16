@@ -3,6 +3,14 @@ import { generateToken } from "../middleware/auth.js";
 import bcrypt from "bcryptjs";
 import Movie from "../models/movie.model.js";
 
+export const getAllUser = async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.json(users);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
 export const signUp = async (req, res) => {
   try {
     const { email, name, password, phone, address, dob } = req.body;

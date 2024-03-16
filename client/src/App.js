@@ -14,7 +14,7 @@ import { fetchMovies } from "./redux/movieSlice/movieSlice";
 import { fetchCategories } from "./redux/categorySlice/category.slice";
 import { fetchPackages } from "./redux/packageSlice/packageSlice";
 import { useEffect } from "react";
-import DashBoard from "./Page/DashBoard/DashBoard";
+import DashBoard from "./Page/DashBoard/Admin/Dashboard";
 import ChangePassword from "./Page/DashBoard/ChangePassword";
 import SingleMovie from "./Page/SingleMovie";
 import FavoriteMovies from "./Page/DashBoard/FavoriteMovie";

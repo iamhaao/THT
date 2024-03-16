@@ -1,15 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addFavorite, getFavorite } from "../../api/movie";
+import { getAllUser } from "../../api/auth";
 
 const initialState = {
   currentUser: null,
   likedMovies: null,
+  users: null,
+  loading: false,
+  error: null,
 };
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    startCall: (state) => {
+      state.loading = false;
+      state.error = null;
+    },
     signInSuccess: (state, action) => {
       state.currentUser = action.payload;
     },
@@ -19,8 +26,12 @@ const userSlice = createSlice({
     fetchFavoriteSuccess: (state, action) => {
       state.likedMovies = action.payload;
     },
-    addFavorites: (state, action) => {
-      state.likedMovies.push(action.payload);
+    fetchUserSuccess: (state, action) => {
+      state.users = action.payload;
+    },
+    userError: (state, error) => {
+      state.loading = false;
+      state.error = error;
     },
   },
 });
@@ -29,9 +40,19 @@ export const {
   updateUserSuccess,
   addFavorites,
   fetchFavoriteSuccess,
+  startCall,
+  userError,
+  fetchUserSuccess,
 } = userSlice.actions;
 export default userSlice.reducer;
-export const fetchFavorite = () => async (dispatch) => {
-  const data = await getFavorite();
-  dispatch(fetchFavoriteSuccess(data));
+export const fetchAllUser = () => async (dispatch) => {
+  try {
+    dispatch(startCall());
+    const data = await getAllUser();
+    console.log(data);
+    dispatch(fetchUserSuccess(data));
+  } catch (error) {
+    console.log(error);
+    dispatch(userError(error.message));
+  }
 };
