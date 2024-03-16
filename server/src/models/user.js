@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  favoriteMovies: [
+  likedMovies: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Movies",
@@ -63,8 +63,8 @@ const userSchema = new mongoose.Schema({
       },
       watchedOn: {
         type: Date,
-        default: Date.now()
-      }
+        default: Date.now(),
+      },
     },
   ],
 });

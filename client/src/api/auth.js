@@ -66,3 +66,68 @@ export const signOut = async () => {
     }
   }
 };
+
+export const uploadProfile = async (userData) => {
+  try {
+    const { data } = await axios.put(`${API_BASE_URL}/users/update`, userData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    return data; // Returning the data received from the server
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.message) {
+      // If the server provides a specific error message, use it
+      throw new Error(error.response.data.message);
+    } else {
+      // Otherwise, use a generic error message
+      throw new Error("An error occurred during sign up.");
+    }
+  }
+};
+export const deleteProfile = async () => {
+  try {
+    const { data } = await axios.delete(`${API_BASE_URL}/users/deleteProfile`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+
+    return data; // Returning the data received from the server
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.message) {
+      // If the server provides a specific error message, use it
+      throw new Error(error.response.data.message);
+    } else {
+      // Otherwise, use a generic error message
+      throw new Error("An error occurred during sign up.");
+    }
+  }
+};
+export const changePassword = async (passwordData) => {
+  try {
+    const { data } = await axios.put(
+      `${API_BASE_URL}/users/change-password`,
+      passwordData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+
+    return data; // Returning the data received from the server
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.message) {
+      // If the server provides a specific error message, use it
+      throw new Error(error.response.data.message);
+    } else {
+      // Otherwise, use a generic error message
+      throw new Error("An error occurred during sign up.");
+    }
+  }
+};

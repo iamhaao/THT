@@ -33,7 +33,7 @@ function Filter() {
   const queries = useMemo(() => {
     const query = {
       category: category?.title === "All Categories" ? "" : category?.title,
-      times: times?.title.replace(/\D/g, ""),
+      time: times?.title.replace(/\D/g, ""),
       language: language?.title === "Sort by Languages" ? "" : language?.title,
       rate: rates?.title.replace(/\D/g, ""),
       year: year?.title.replace(/\D/g, ""),

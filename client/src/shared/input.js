@@ -40,6 +40,7 @@ export const Input = ({
   value,
   onChange,
   suffix,
+  required,
 }) => {
   return (
     <>
@@ -50,15 +51,15 @@ export const Input = ({
         <div className="flex flex-col">
           <div className="relative">
             <input
-              required
+              required={required}
               name={name}
               value={value}
               onChange={onChange}
               {...register}
               type={type}
               placeholder={placeholder}
-              className={`w-full text-sm font-euclid font-normal p-2 text-black border border-border rounded-md ${
-                bg ? "bg-main" : "bg-white"
+              className={`w-full text-sm font-euclid font-normal p-2  border border-border rounded-md ${
+                bg ? "bg-main text-white" : "bg-white text-black"
               }`}
             />
             {suffix && (

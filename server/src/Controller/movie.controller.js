@@ -136,13 +136,12 @@ const getMovies = async (req, res, next) => {
     const { category, time, language, rate, year, search } = req.query;
     let query = {
       ...(category && { category }),
-      ...(time && { time }),
+      ...(time && { time: { $lte: time } }),
       ...(language && { language }),
-      ...(rate && { rate }),
+      ...(rate && { rate: { $gte: rate } }),
       ...(year && { year }),
       ...(search && { name: { $regex: search, $options: "i" } }),
     };
-
     //Load more movies function
     const page = Number(req.query.pageNumber) || 1;
     const limit = 8;

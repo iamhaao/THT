@@ -14,6 +14,11 @@ import { fetchMovies } from "./redux/movieSlice/movieSlice";
 import { fetchCategories } from "./redux/categorySlice/category.slice";
 import { fetchPackages } from "./redux/packageSlice/packageSlice";
 import { useEffect } from "react";
+import DashBoard from "./Page/DashBoard/DashBoard";
+import ChangePassword from "./Page/DashBoard/ChangePassword";
+import SingleMovie from "./Page/SingleMovie";
+import FavoriteMovies from "./Page/DashBoard/FavoriteMovie";
+import { fetchFavoriteMovie } from "./redux/userSlice/favoriteSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -24,6 +29,7 @@ function App() {
     dispatch(fetchPackages());
     if (currentUser) {
       //get favorite list movies
+      dispatch(fetchFavoriteMovie());
     }
   }, [currentUser]);
 
@@ -37,11 +43,17 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/movies" element={<Movies />} />
         <Route path="/movies/:search" element={<Movies />} />
+        <Route path="/movie/:id" element={<SingleMovie />} />
+
         <Route element={<ProtectedRouter />}>
           <Route path="/premium" element={<PremiumAccount />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/password" element={<ChangePassword />} />
+          <Route path="/favorites" element={<FavoriteMovies />} />
+
           <Route element={<AdminProtectedRouter />}>
             <Route element={<AddMovie />} path="/add-movie" />
+            <Route element={<DashBoard />} path="/dashboard" />
           </Route>
         </Route>
       </Routes>

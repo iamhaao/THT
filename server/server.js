@@ -29,7 +29,7 @@ app.use("/categories", categoryRouter);
 app.use("/packages", premiumPacakgeRouter);
 app.use("/movies", movieRouter);
 app.use("/users", userRouter);
-app.use("upload", uploadRouter);
+app.use("/upload", uploadRouter);
 
 app.get("/", (req, res) => res.send("API Running"));
 // run server on port 5000

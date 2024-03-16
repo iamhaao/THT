@@ -13,13 +13,14 @@ function Header() {
   const handleSearch = (e) => {
     e.preventDefault();
     if (search.trim()) {
-      navigate(`/filter/${search}`);
+      navigate(`/movies/${search}`);
       setSearch(search);
     } else {
-      navigate("/filter");
+      navigate("/movies");
     }
   };
   const { currentUser } = useSelector((state) => state.user);
+  const { likedMovies } = useSelector((state) => state.favorite);
 
   return (
     <div className="bg-main shadow-md sticky top-0 z-20 ">
@@ -102,11 +103,11 @@ function Header() {
             )}
           </NavLink>
           <NavLink
-            to="/favorite"
+            to="/favorites"
             className={`hover:text-subMain transitions text-white flex gap-2 justify-end items-center relative`}
           >
             <div className="w-5 h-5 flex-colo rounded-full text-xs bg-subMain text-white absolute -top-5 -right-1 ">
-              0
+              {likedMovies ? likedMovies.length : 0}
             </div>
             <FiHeart className="w-6 h-6" />
           </NavLink>

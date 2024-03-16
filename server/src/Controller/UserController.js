@@ -1,6 +1,7 @@
 import User from "../models/user.js";
 import { generateToken } from "../middleware/auth.js";
 import bcrypt from "bcryptjs";
+import Movie from "../models/movie.model.js";
 
 export const signUp = async (req, res) => {
   try {
@@ -68,18 +69,33 @@ export const signOut = async (req, res) => {
   res.clearCookie("auth_token");
   res.status(200).json({ message: "Logged out successfully" });
 };
-
 export const changePassword = async (req, res) => {
   const { oldPassword, newPassword } = req.body;
-  const user = await User.findById(req.user._id);
-  const isMatch = await user.comparePassword(oldPassword);
-  if (!isMatch) {
-    return res.status(400).json({ message: "Invalid credentials" });
+
+  try {
+    // Finding the user by ID
+    const user = await User.findById(req.user._id);
+
+    // Checking if the old password matches the stored hashed password
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    // Hashing the new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    // Updating the user's password
+    user.password = hashedPassword;
+    await user.save();
+
+    // Sending the response with success message
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
   }
-  user.password = newPassword;
-  await user.save();
-  res.header("auth_token", token);
-  res.status(200).json({ message: "Password changed successfully" });
 };
 
 export const signUpPremium = async (req, res) => {
@@ -99,15 +115,128 @@ export const signUpPremium = async (req, res) => {
   res.status(200).json({ message: "Upgrade to premium successfully" });
 };
 
-export const validateToken = async (req, res) => {
-  res.status(200).json(req.user);
-};
-
 export const historyByUserId = async (req, res, next) => {
   try {
     const user = await User.findById(req.user).populate("watchHistory.movieId");
     if (user) {
       res.json(user.watchHistory);
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+export const updateUserProfile = async (req, res, next) => {
+  const { name, email, image, phone, bod } = req.body;
+  try {
+    const user = await User.findById(req.user._id);
+    if (user) {
+      user.fullName = name || user.fullName;
+      user.email = email || user.email;
+      user.avatar = image || user.avatar;
+      user.phone = phone || user.phone;
+      user.bod = bod || user.bod;
+
+      const updateUser = await user.save();
+      res.json(updateUser);
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+export const deleteUserProfile = async (req, res, next) => {
+  try {
+    const user = User.findById(req.user._id);
+    if (user) {
+      if (user.isAdmin) {
+        res.status(400);
+        throw new Error("Cant delete admin account");
+      }
+      await user.deleteOne();
+      res.json({ message: "User deleted successfully" });
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+export const getLikedMovies = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id).populate("likedMovies");
+    if (user) {
+      res.json(user.likedMovies);
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+export const deleteAllLikedMovies = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id).populate("likedMovies");
+    if (user) {
+      user.likedMovies = [];
+      await user.save();
+      res.status(200).json({ message: "Delete Success!" });
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+export const addLikedMovies = async (req, res, next) => {
+  const { movieId } = req.params;
+  try {
+    const moive = await Movie.findById(movieId);
+    if (!moive) {
+      res.status(404);
+      throw new Error("Movie not found");
+    }
+    const user = await User.findById(req.user._id);
+    if (user) {
+      if (user?.likedMovies) {
+        const isMovieLiked = user.likedMovies.some(
+          (movie) => movie._id.toString() === movieId
+        );
+
+        if (isMovieLiked) {
+          res.status(400);
+          throw new Error("Movie already liked");
+        }
+      }
+      user.likedMovies.push(movieId);
+      await user.save();
+      const userUpdated = await User.findById(req.user._id).populate(
+        "likedMovies"
+      );
+      res.status(200).json(userUpdated.likedMovies);
+    } else {
+      res.status(404);
+      throw new Error("User not found");
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+export const deleteLikedMovies = async (req, res, next) => {
+  const { movieId } = req.params();
+  try {
+    const user = await User.findById(req.user._id);
+    if (user) {
+      user.likedMovies.pull({ _id: movieId });
+      await user.save();
+      res.status(200).json({ message: "Remove sucessfully movie " });
     } else {
       res.status(404);
       throw new Error("User not found");

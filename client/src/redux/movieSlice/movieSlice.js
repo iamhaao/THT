@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchMoviesApi } from "../../api/movie";
+import { fetchMoviesApi, getMovieById } from "../../api/movie";
 
 const initialState = {
   movies: null,
@@ -8,6 +8,7 @@ const initialState = {
   pages: 1,
   page: 1,
   totalMovies: null,
+  singleMovie: null,
 };
 
 const movieSlice = createSlice({
@@ -29,11 +30,18 @@ const movieSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    fetchSingleMovieSucces: (state, action) => {
+      state.singleMovie = action.payload;
+    },
   },
 });
 
-export const { getMoviesStart, getMoviesSuccess, getMoviesError } =
-  movieSlice.actions;
+export const {
+  getMoviesStart,
+  getMoviesSuccess,
+  getMoviesError,
+  fetchSingleMovieSucces,
+} = movieSlice.actions;
 
 export default movieSlice.reducer;
 // Async action creator to fetch movies
@@ -66,3 +74,15 @@ export const fetchMovies =
       dispatch(getMoviesError(error.message));
     }
   };
+
+export const fetchSingleMovie = (movieid) => async (dispatch) => {
+  try {
+    dispatch(getMoviesStart());
+    const data = await getMovieById(movieid);
+
+    dispatch(fetchSingleMovieSucces(data));
+  } catch (error) {
+    console.log(error);
+    dispatch(getMoviesError(error.message));
+  }
+};

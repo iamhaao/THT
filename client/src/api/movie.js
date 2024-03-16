@@ -33,3 +33,107 @@ export const fetchMoviesApi = async (
     }
   }
 };
+
+export const getFavorite = async () => {
+  try {
+    const { data } = await axios.get(`${API_BASE_URL}/users/favorites`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+    return data;
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.message) {
+      // If the server provides a specific error message, use it
+      throw new Error(error.response.data.message);
+    } else {
+      // Otherwise, use a generic error message
+      throw new Error("An error occurred during call api!");
+    }
+  }
+};
+export const deleteAllFavorite = async () => {
+  try {
+    const { data } = await axios.delete(`${API_BASE_URL}/users/favorites`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+    return data;
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.message) {
+      // If the server provides a specific error message, use it
+      throw new Error(error.response.data.message);
+    } else {
+      // Otherwise, use a generic error message
+      throw new Error("An error occurred during call api!");
+    }
+  }
+};
+export const addFavorite = async (movieId) => {
+  try {
+    const { data } = await axios.post(
+      `${API_BASE_URL}/users/favorites/${movieId}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    return data;
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.message) {
+      // If the server provides a specific error message, use it
+      throw new Error(error.response.data.message);
+    } else {
+      // Otherwise, use a generic error message
+      throw new Error("An error occurred during call api!");
+    }
+  }
+};
+export const deleteFavorite = async (movieId) => {
+  try {
+    const { data } = await axios.delete(
+      `${API_BASE_URL}/users/favorites/${movieId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+    return data;
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.message) {
+      // If the server provides a specific error message, use it
+      throw new Error(error.response.data.message);
+    } else {
+      // Otherwise, use a generic error message
+      throw new Error("An error occurred during call api!");
+    }
+  }
+};
+
+export const getMovieById = async (movieId) => {
+  try {
+    const { data } = await axios.get(`${API_BASE_URL}/movies/${movieId}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+    return data;
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.message) {
+      // If the server provides a specific error message, use it
+      throw new Error(error.response.data.message);
+    } else {
+      // Otherwise, use a generic error message
+      throw new Error("An error occurred during call api!");
+    }
+  }
+};
