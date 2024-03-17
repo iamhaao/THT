@@ -5,6 +5,7 @@ const initialState = {
   packages: null,
   loading: false,
   error: null,
+  premiumChoose: null,
 };
 
 const categorySlice = createSlice({
@@ -24,11 +25,18 @@ const categorySlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    selectedPackageRegister: (state, action) => {
+      state.premiumChoose = action.payload;
+    },
   },
 });
 
-export const { getPackagesStart, getPackagesError, getPackagesSuccess } =
-  categorySlice.actions;
+export const {
+  getPackagesStart,
+  getPackagesError,
+  getPackagesSuccess,
+  selectedPackageRegister,
+} = categorySlice.actions;
 
 export default categorySlice.reducer;
 export const fetchPackages = () => async (dispatch) => {

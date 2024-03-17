@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../Layout/Layout";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { BiArrowBack } from "react-icons/bi";
-import { FaCloudDownloadAlt, FaHeart, FaPlay } from "react-icons/fa";
+import { FaCloudDownloadAlt, FaCrown, FaHeart, FaPlay } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 // import { getMovieByIdAction } from "../Redux/Actions/MoviesAction";
 import Loader from "../shared/Notification/Loader";
 import { RiMovie2Line } from "react-icons/ri";
 import { IfMovieLiked, LikeMovie } from "../context/Functionaltes";
 import { fetchSingleMovie } from "../redux/movieSlice/singleMovieSlice";
+import Toast from "../shared/Toast";
 
 function WatchPage() {
   let { id } = useParams();
   const dispatch = useDispatch();
   const sameClass = "w-full gap-6 flex-colo min-h-screen  ";
-
+  const navigate = useNavigate();
   const [play, setPlay] = useState(false);
   const { loading, error, movie } = useSelector((state) => state.singleMovie);
   const { loading: likeLoading } = useSelector((state) => state.favorite);
@@ -27,8 +28,11 @@ function WatchPage() {
 
   useEffect(() => {
     //movie id
-    dispatch(fetchSingleMovie(id));
-  }, [dispatch, id]);
+    if (movie.isPremium && !currentUser.premium.isPremium) {
+      Toast({ message: "This movie just premium account", type: "ERROR" });
+      navigate("/");
+    }
+  }, [dispatch, id, movie, currentUser, navigate]);
   return (
     <Layout>
       <div className="container mx-auto bg-dry p-6 mb-12">
@@ -38,7 +42,8 @@ function WatchPage() {
               to={`/movie/${movie?._id}`}
               className="md:text-xl text-sm flex gap-3 items-center font-bold text-dryGray  "
             >
-              <BiArrowBack /> {movie?.name}
+              <BiArrowBack /> {movie?.name}{" "}
+              {movie.isPremium && <FaCrown className="text-yellow-600" />}
             </Link>
             <div className="flex-btn sm:w-auto w-full gap-5">
               <button

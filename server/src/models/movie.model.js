@@ -62,6 +62,10 @@ const moviesSchema = new mongoose.Schema(
       required: true,
       default: 0,
     },
+    isPremium: {
+      type: Boolean,
+      default: false,
+    },
     numberOfReviews: {
       type: Number,
       required: true,

@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import FlexMovieItems from "../FlexMovieItems";
 import { Link } from "react-router-dom";
-import { FaHeart } from "react-icons/fa";
+import { FaCrown, FaHeart } from "react-icons/fa";
 import Loader from "../../shared/Notification/Loader";
 import { RiMovie2Line } from "react-icons/ri";
 import { IfMovieLiked, LikeMovie } from "../../context/Functionaltes";
@@ -47,9 +47,15 @@ const Swipper = ({ sameClass, movies }) => {
             className="w-full h-full object-cover "
           />
           <div className="absolute linear-bg xl:pl-52 sm:pl-32 pl-8 top-0 bottom-0 right-0 left-0  flex flex-col justify-center  lg:gap-8 md:gap-5 gap-4 ">
-            <h1 className="xl:text-4xl truncate capitalize font-sans sm:text-2xl text-xl font-bold ">
-              {movie.name}
-            </h1>
+            <div className=" flex gap-3 items-center">
+              <h1 className="xl:text-4xl truncate capitalize font-sans sm:text-2xl text-xl font-bold ">
+                {movie.name}
+              </h1>
+              {movie.isPremium && (
+                <FaCrown className="text-yellow-600 h-6 w-6" />
+              )}
+            </div>
+
             <div className="flex gap-5 items-center text-dryGray">
               <FlexMovieItems movie={movie} />
             </div>
