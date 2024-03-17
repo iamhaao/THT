@@ -16,7 +16,6 @@ const createMovie = async (req, res, next) => {
       language,
       year,
       casts,
-      video,
     } = req.body;
     const movie = new Movie({
       name,
@@ -30,7 +29,6 @@ const createMovie = async (req, res, next) => {
       language,
       year,
       casts,
-      video,
       userId: req.user._id,
     });
 
@@ -41,6 +39,14 @@ const createMovie = async (req, res, next) => {
       res.status(400);
       throw new Error("Invalid movie data");
     }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+const deleteAllMovie = async (req, res, next) => {
+  try {
+    await Movie.deleteMany();
+    res.status(201).json({ message: "Delete Successful" });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -208,4 +214,5 @@ export {
   getMovies,
   deleteMovie,
   createMovieReview,
+  deleteAllMovie,
 };
