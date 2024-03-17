@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Titles from "../Titles";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
@@ -9,9 +9,16 @@ import Rating from "../Start";
 import Loader from "../../shared/Notification/Loader";
 import { Empty } from "../../shared/Notification/Empty";
 import { useDispatch, useSelector } from "react-redux";
+import { IfMovieLiked, LikeMovie } from "../../context/Functionaltes";
 
 const Swipper = ({ prevEl, nextEl, movies }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.user);
+  const isLiked = (movie) => {
+    return IfMovieLiked(movie);
+  };
+
   return (
     <Swiper
       navigation={{ nextEl, prevEl }}
@@ -44,27 +51,32 @@ const Swipper = ({ prevEl, nextEl, movies }) => {
     >
       {movies.map((movie, index) => (
         <SwiperSlide key={index}>
-          <div className="p-4 h-rate hovered border border-border bg-dry rounded-lg overflow-hidden">
-            <img
-              src={movie?.titleImage ? movie?.titleImage : ""}
-              alt={movie.name}
-              className="w-full h-full object-cover rounded-lg"
-            />
-          </div>
-          <div className="w-full hoveres px-4 gap-6 text-center absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-70 ">
-            <button
-              className={`w-12 h-12 flex-colo transitions bg-white bg-opacity-30 hover:bg-subMain rounded-full text-white`}
-            >
-              <FaHeart />
-            </button>
-            <Link
-              to={`/movie/${movie._id}`}
-              className="font-semibold text-xl trancuted line-clamp-2"
-            >
-              {movie.name}
-            </Link>
-            <div className="flex gap-2 text-star">
-              <Rating value={movie?.rate} />
+          <div className="relative group">
+            <div className="p-2 h-rate border border-border bg-dry rounded-lg overflow-hidden">
+              <img
+                src={movie?.titleImage ? movie?.titleImage : ""}
+                alt={movie.name}
+                className="w-full h-full object-cover rounded-lg"
+              />
+            </div>
+            <div className="w-full absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-70 hidden group-hover:flex flex-col justify-center items-center">
+              <button
+                onClick={() => LikeMovie(movie, dispatch, currentUser)}
+                className={`w-12 h-12 flex items-center justify-center transitions 
+      ${isLiked(movie) ? "bg-subMain" : "bg-white bg-opacity-30"}
+      hover:bg-subMain rounded-full text-white`}
+              >
+                <FaHeart />
+              </button>
+              <Link
+                to={`/movie/${movie._id}`}
+                className="font-semibold text-xl truncated line-clamp-2 text-white mt-2"
+              >
+                {movie.name}
+              </Link>
+              <div className="flex gap-2 text-star">
+                <Rating value={movie?.rate} />
+              </div>
             </div>
           </div>
         </SwiperSlide>
