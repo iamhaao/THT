@@ -51,7 +51,7 @@ function SideBar({ children }) {
         },
         {
           name: "Add Movie",
-          link: "/addmovie",
+          link: "/add-movie",
           icon: RiMovie2Fill,
         },
         {

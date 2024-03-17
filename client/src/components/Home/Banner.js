@@ -14,7 +14,6 @@ const Swipper = ({ sameClass, movies }) => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
   const { error } = useSelector((state) => state.favorite);
-  console.log(error);
   const isLiked = (movie) => {
     return IfMovieLiked(movie);
   };

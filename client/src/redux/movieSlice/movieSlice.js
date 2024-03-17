@@ -8,6 +8,7 @@ const initialState = {
   pages: 1,
   page: 1,
   totalMovies: null,
+  casts: [],
 };
 
 const movieSlice = createSlice({
@@ -29,6 +30,23 @@ const movieSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    fetchCast: (state, action) => {
+      state.casts = action.payload;
+    },
+    addCasts: (state, action) => {
+      state.casts = [...state.casts, action.payload];
+    },
+    removeCast: (state, action) => {
+      state.casts = state.casts.filter((cast) => cast.id !== action.payload);
+    },
+    editCast: (state, action) => {
+      state.casts = state.casts.map((cast) =>
+        cast.id === action.payload.id ? action.payload : cast
+      );
+    },
+    resetCast: (state) => {
+      state.casts = [];
+    },
   },
 });
 
@@ -37,6 +55,11 @@ export const {
   getMoviesSuccess,
   getMoviesError,
   fetchSingleMovieSucces,
+  addCasts,
+  editCast,
+  removeCast,
+  fetchCast,
+  resetCast,
 } = movieSlice.actions;
 
 export default movieSlice.reducer;

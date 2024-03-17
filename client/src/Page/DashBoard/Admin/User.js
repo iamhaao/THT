@@ -49,6 +49,7 @@ function Users() {
             data={users}
             users={true}
             ondeleteFunction={deleteUserHandler}
+            packagePremium={false}
           />
         ) : (
           <Empty message="No Users" />

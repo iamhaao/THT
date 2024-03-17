@@ -55,6 +55,7 @@ const moviesSchema = new mongoose.Schema(
     },
     video: {
       type: String,
+      default: "/images/movie.mp4",
     },
     rate: {
       type: Number,

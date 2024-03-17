@@ -14,6 +14,9 @@ import { movieValidation } from "../../../shared/validation/movieValidation";
 import { InlineError } from "../../../shared/Notification/Error";
 import { ImagePreview } from "../../../components/ImagePreview";
 import Toast from "../../../shared/Toast";
+import { useMutation } from "react-query";
+import { createMovie } from "../../../api/movie";
+import { removeCast, resetCast } from "../../../redux/movieSlice/movieSlice";
 function AddMovie() {
   const [modalOpen, setModalOpen] = useState(false);
   const [cast, setCast] = useState(null);
@@ -24,12 +27,22 @@ function AddMovie() {
   const navigate = useNavigate();
 
   //getAllCategory
-  const { categories } = useSelector((state) => state.categories);
-  const { isLoading, isError, isSuccess } = useSelector(
-    (state) => state.createMovie
-  );
-  const { casts } = useSelector((state) => state.casts);
+  const { categories } = useSelector((state) => state.category);
 
+  const { casts } = useSelector((state) => state.movie);
+
+  useEffect(() => {
+    console.log(casts);
+  }, [casts]);
+  const { mutate, isSuccess, isLoading } = useMutation(createMovie, {
+    onSuccess: () => {
+      Toast({ message: "Add Movie Success", type: "SUCCESS" });
+      dispatch(resetCast());
+    },
+    onError: (error) => {
+      Toast({ message: error.message, type: "ERROR" });
+    },
+  });
   //validate movie
   const {
     register,
@@ -41,19 +54,17 @@ function AddMovie() {
   });
   //onsubmit
   const onSubmit = (data) => {
-    // dispatch(
-    //   createMovieActin({
-    //     ...data,
-    //     image: imageWithoutTitle,
-    //     titleImage: imageTitle,
-    //     video: videoUrl,
-    //     casts,
-    //   })
-    // );
+    mutate({
+      ...data,
+      image: imageWithoutTitle,
+      titleImage: imageTitle,
+      video: videoUrl,
+      casts,
+    });
   };
   //delete cast handler
   const deleteCastHandler = (id) => {
-    // dispatch(removeCastAction(id));
+    dispatch(removeCast(id));
     Toast("Cast deleted successfully", "SUCCESS");
   };
 
@@ -75,15 +86,9 @@ function AddMovie() {
       setImageTitle("");
       setImageWithoutTitle("");
       setVideoUrl("");
-      dispatch({ type: "CREATE_MOVIE_RESET" });
-      navigate("/addMovie");
+      navigate("/add-movie");
     }
-    if (isError) {
-      Toast("Something went wrong", "ERROR");
-
-      dispatch({ type: "CREATE_MOVIE_RESET" });
-    }
-  }, [modalOpen, isSuccess, isError, dispatch, reset, navigate]);
+  }, [modalOpen, isSuccess, dispatch, reset, navigate]);
   return (
     <SideBar>
       <CastsModal
@@ -242,7 +247,7 @@ function AddMovie() {
         <button
           disabled={isLoading || !imageTitle || !imageWithoutTitle || !videoUrl}
           onClick={handleSubmit(onSubmit)}
-          className="bg-subMain w-full flex-rows gap-6 font-medium  text-white py-3 rounded"
+          className="bg-subMain w-full flex-rows gap-6 font-medium  text-white py-3 rounded disabled:bg-slate-900"
         >
           {isLoading ? (
             "Please wait..."
