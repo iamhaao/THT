@@ -2,7 +2,7 @@ import User from "../models/user.js";
 import { generateToken } from "../middleware/auth.js";
 import bcrypt from "bcryptjs";
 import Movie from "../models/movie.model.js";
-
+import PremiumPackage from "../models/PremiumPackage.js";
 export const getAllUser = async (req, res) => {
   try {
     const users = await User.find({});
@@ -108,15 +108,15 @@ export const changePassword = async (req, res) => {
 
 export const signUpPremium = async (req, res) => {
   const user = await User.findById(req.user._id);
-  const packagePremium = req.body.packagePremium;
-
+  const packageId = req.body.packageId;
+  console.log(packageId);
   // search package premium by id
-  //   const isExists = await PackagePremium.findById(packagePremium);
-  //   if (!isExists) {
-  //     return res.status(404).json({ message: "Package premium not found" });
-  //   }
+  const isExists = await PremiumPackage.findById(packageId);
+  if (!isExists) {
+    return res.status(404).json({ message: "Package premium not found" });
+  }
   user.premium.exp = new Date(
-    new Date().getTime() + packagePremium * 24 * 60 * 60 * 1000
+    new Date().getTime() + isExists.day * 24 * 60 * 60 * 1000
   );
   user.premium.isPremium = true;
   await user.save();

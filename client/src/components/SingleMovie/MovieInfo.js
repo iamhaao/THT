@@ -1,6 +1,6 @@
 import React from "react";
 import FlexMovieItems from "../FlexMovieItems";
-import { FaPlay, FaShareAlt } from "react-icons/fa";
+import { FaCrown, FaPlay, FaShareAlt } from "react-icons/fa";
 import { FiLogIn } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import Rating from "../Start";
@@ -24,9 +24,15 @@ function MovieInfo({ movie, setModalOpen, progress }) {
           <div className="col-span-2 md:grid grid-cols-5 gap-4 items-center">
             <div className="col-span-3 flex flex-col gap-10 ">
               {/*Title */}
-              <h1 className="xl:text-4xl capitalize font-sans text-2xl font-bold">
-                {movie.name}
-              </h1>
+              <div className="flex gap-2 items-center">
+                <h1 className="xl:text-4xl capitalize font-sans text-2xl font-bold">
+                  {movie.name}
+                </h1>
+                {movie.isPremium && (
+                  <FaCrown className="text-yellow-600 h-6 w-6" />
+                )}
+              </div>
+
               {/*Flex items */}
               <div className="flex items-center gap-4 font-medium text-dryGray">
                 <div className="flex-colo bg-subMain text-xs px-2 py-1">
